@@ -1,0 +1,17 @@
+{
+    "name": "devstudio-rs/wpmvc",
+    "description": "WPMVC",
+    "type": "framework",
+    "autoload": {
+        "psr-4": {
+            "wpmvc\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "DevStudio",
+            "email": "kontakt@devstudio.rs"
+        }
+    ],
+    "require": {}
+}
