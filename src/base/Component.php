@@ -25,7 +25,7 @@ abstract class Component {
      * @param mixed $value
      * @return bool
      */
-    public function set_attribute( string $name, mixed $value ) : bool {
+    public function set_attribute( string $name, $value ) : bool {
         return $this->set_attributes( array(
             $name => $value,
         ) );
