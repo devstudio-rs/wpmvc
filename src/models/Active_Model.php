@@ -1,7 +1,8 @@
 <?php
 
-namespace wpmvc\base;
+namespace wpmvc\models;
 
+use wpmvc\base\Model;
 use wpmvc\interfaces\Active_Model_Interface;
 
 abstract class Active_Model extends Model implements Active_Model_Interface {

@@ -2,8 +2,6 @@
 
 namespace wpmvc\models;
 
-use wpmvc\base\Active_Model;
-
 class Post_Model extends Active_Model {
 
     const STATUS_ANY     = 'any';
