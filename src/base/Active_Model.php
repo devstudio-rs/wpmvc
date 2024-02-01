@@ -15,7 +15,7 @@ abstract class Active_Model extends Model implements Active_Model_Interface {
      * @param array $params
      * @return static
      */
-    public static function find( array $params = array() ) : self {
+    public static function find( array $params = array() ) {
         $model = new static();
 
         $model->query_params = $params;
