@@ -9,6 +9,7 @@ class Post_Model extends Active_Model {
     const STATUS_ANY     = 'any';
     const STATUS_PUBLISH = 'publish';
     const STATUS_DRAFT   = 'draft';
+    const STATUS_PRIVATE = 'private';
     const STATUS_TRASH   = 'trash';
 
     public $ID;
@@ -24,6 +25,7 @@ class Post_Model extends Active_Model {
             'posts_per_page'    => -1,
             'post_status'       => array(
                 static::STATUS_DRAFT,
+                static::STATUS_PRIVATE,
                 static::STATUS_PUBLISH
             ),
         ), $params );
