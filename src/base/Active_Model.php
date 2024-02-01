@@ -2,20 +2,35 @@
 
 namespace wpmvc\base;
 
-abstract class Active_Model extends Model {
+use wpmvc\interfaces\Active_Model_Interface;
 
-    private $query_params = array();
+abstract class Active_Model extends Model implements Active_Model_Interface {
 
-    public static function find( $params = array() ) : self {
+    /**
+     * @var array
+     */
+    protected $query_params = array();
+
+    /**
+     * @param array $params
+     * @return static
+     */
+    public static function find( array $params = array() ) : self {
         $model = new static();
 
-        $model->set_attribute( 'query_params', $params );
+        $model->query_params = $params;
 
         return $model;
     }
 
-    public function one() {}
-
-    public function all() {}
+    /**
+     * @param int $id
+     * @return static
+     */
+    public static function find_one( int $id ) : self {
+        return static::find( array(
+            'p' => $id,
+        ) )->one();
+    }
 
 }
