@@ -2,7 +2,7 @@
 
 namespace wpmvc\models;
 
-class Post_Model extends Active_Model {
+abstract class Post_Model extends Active_Model {
 
     const STATUS_ANY     = 'any';
     const STATUS_PUBLISH = 'publish';
