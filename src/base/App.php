@@ -4,12 +4,28 @@ namespace wpmvc\base;
 
 abstract class App extends Component {
 
+    /**
+     * @var array
+     */
     private $config = array();
 
     /**
      * @var Request
      */
     public $request;
+
+    /** @var \wpmvc\web\Router */
+    public $router;
+
+    /**
+     * @var Controller
+     */
+    public $controller;
+
+    /**
+     * @var string
+     */
+    public $action;
 
     public function __construct( array $config = array() ) {
         $this->set_config( $config );
@@ -29,6 +45,8 @@ abstract class App extends Component {
     }
 
     private function setup_components() {
+        $this->router = new \wpmvc\web\Router();
+
         if ( empty( $this->config['components'] ) ) {
             return;
         }
