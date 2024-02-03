@@ -22,11 +22,6 @@ abstract class App extends Component {
      */
     public $controller;
 
-    /**
-     * @var string
-     */
-    public $action;
-
     public function __construct( array $config = array() ) {
         $this->set_config( $config );
 

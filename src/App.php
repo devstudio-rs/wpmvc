@@ -42,7 +42,10 @@ class App extends \wpmvc\base\App {
                 continue;
             }
 
-            $this->action = $action;
+            $this->controller->action = $action;
+            $this->controller->before_action();
+
+            call_user_func( array( $this->controller, $this->controller->action ) );
         }
     }
 
