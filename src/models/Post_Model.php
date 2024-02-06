@@ -98,6 +98,13 @@ abstract class Post_Model extends Active_Model {
     }
 
     /**
+     * @return array|false|\WP_Post|null
+     */
+    public function delete() {
+        return wp_delete_post( $this->ID );
+    }
+
+    /**
      * @param array $args
      * @return \WP_Error|\WP_Post_Type
      */
