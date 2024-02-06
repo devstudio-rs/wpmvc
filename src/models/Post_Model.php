@@ -11,7 +11,8 @@ abstract class Post_Model extends Active_Model {
     const STATUS_TRASH   = 'trash';
 
     public $ID;
-    public $post_type = 'post';
+    public $post_type    = 'post';
+    public $post_status  = self::STATUS_DRAFT;
 
     /**
      * @param array $params
@@ -94,6 +95,37 @@ abstract class Post_Model extends Active_Model {
         }
 
         return true;
+    }
+
+    public static function register( $args = array() ) {
+        $post_type = ( new static() )->post_type;
+        $args      = array_merge( array(
+            'labels'             => array(
+                'name' => ucfirst( strtolower( $post_type ) ),
+            ),
+            'public'             => true,
+            'publicly_queryable' => true,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'show_in_rest'       => true,
+            'query_var'          => true,
+            'rewrite'            => array(
+                'slug'       => $post_type,
+                'with_front' => false,
+            ),
+            'capability_type'    => 'post',
+            'has_archive'        => true,
+            'hierarchical'       => false,
+            'menu_position'      => 10,
+            'supports'           => array(
+                'title',
+                'editor',
+                'excerpt',
+                'thumbnail',
+            ),
+        ), $args );
+
+        return register_post_type( $post_type, $args );
     }
 
 }
