@@ -97,7 +97,11 @@ abstract class Post_Model extends Active_Model {
         return true;
     }
 
-    public static function register( $args = array() ) {
+    /**
+     * @param array $args
+     * @return \WP_Error|\WP_Post_Type
+     */
+    public static function register( array $args = array() ) {
         $post_type = ( new static() )->post_type;
         $args      = array_merge( array(
             'labels'             => array(
