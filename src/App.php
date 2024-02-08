@@ -10,6 +10,10 @@ class App extends \wpmvc\base\App {
     public static $app;
 
     public function init() {
+        if ( static::$app !== null ) {
+            return;
+        }
+
         static::$app = $this;
 
         add_action( 'template_redirect', array( $this, 'template_redirect' ) );

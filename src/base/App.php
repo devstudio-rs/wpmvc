@@ -17,6 +17,9 @@ abstract class App extends Component {
     /** @var \wpmvc\web\Router */
     public $router;
 
+    /** @var \wpmvc\web\View */
+    public $view;
+
     /**
      * @var Controller
      */
@@ -84,6 +87,13 @@ abstract class App extends Component {
         }
 
         return translate( $text, $domain );
+    }
+
+    /**
+     * @return array
+     */
+    public function get_config() : array {
+        return static::$config;
     }
 
 }
