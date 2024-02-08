@@ -35,6 +35,7 @@ abstract class App extends Component {
     private function set_config( array $config = array() ) {
         static::$config = array_merge( array(
             'name'       => '',
+            'domain'     => 'default',
             'aliases'    => array(),
             'components' => array(),
         ), $config );
@@ -70,6 +71,19 @@ abstract class App extends Component {
         }
 
         return str_replace( $alias, static::$config['aliases'][ $alias ], $value );
+    }
+
+    /**
+     * @param string $text
+     * @param string|null $domain
+     * @return string
+     */
+    public static function t( string $text, $domain = null ) : string {
+        if ( empty( $domain ) ) {
+            $domain = static::$config['domain'];
+        }
+
+        return translate( $text, $domain );
     }
 
 }
