@@ -146,13 +146,19 @@ abstract class Post_Model extends Active_Model {
         return register_post_type( $post_type, $args );
     }
 
-    public function add_meta_box( string $controller ) {
+    public function add_meta_box( string $meta_box_model_class ) {
+        /** @var Meta_Box_Model $meta_box_model */
+        $meta_box_model = new $meta_box_model_class();
+
+        $meta_box_model->set_model( static::class );
+
         /** @var Meta_Box_Controller $controller */
-        $controller = new $controller();
+        $controller = new $meta_box_model->controller();
 
-        $controller->set_model( static::class );
+        $controller->model = static::class;
+        $controller->meta_box_model = $meta_box_model_class;
 
-        add_action( 'add_meta_boxes_' . $this->post_type, array( $controller, 'init' ) );
+        add_action( sprintf( 'add_meta_boxes_%s', $this->post_type ), array( $controller, 'init' ) );
         add_action( 'wp_after_insert_post', array( $controller, 'before_save' ), 10, 2 );
     }
 
