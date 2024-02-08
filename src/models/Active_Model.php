@@ -26,12 +26,44 @@ abstract class Active_Model extends Model implements Active_Model_Interface {
 
     /**
      * @param int $id
-     * @return mixed
+     * @return null|Active_Model
      */
     public static function find_one( int $id ) {
         return static::find( array(
             'p' => $id,
         ) )->one();
+    }
+
+    /**
+     * @param array $attributes
+     * @return bool
+     */
+    public function load( array $attributes = array() ) : bool {
+        $loaded = false;
+
+        if ( empty( $attributes ) ) {
+            return false;
+        }
+
+        $class_name = $this->get_class_name();
+
+        if ( empty( $attributes[ $class_name ] ) ) {
+            return false;
+        }
+
+        $model_attributes = $attributes[ $class_name ];
+
+        foreach ( $this->get_attributes() as $attribute => $value ) {
+            if ( ! isset( $model_attributes[ $attribute ] ) ) {
+                continue;
+            }
+
+            $this->set_attribute( $attribute, $model_attributes[ $attribute ] );
+
+            $loaded = true;
+        }
+
+        return $loaded;
     }
 
 }

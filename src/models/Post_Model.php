@@ -2,6 +2,8 @@
 
 namespace wpmvc\models;
 
+use wpmvc\web\Meta_Box_Controller;
+
 abstract class Post_Model extends Active_Model {
 
     const STATUS_ANY     = 'any';
@@ -13,6 +15,8 @@ abstract class Post_Model extends Active_Model {
     public $ID;
     public $post_type    = 'post';
     public $post_status  = self::STATUS_DRAFT;
+
+    public function init() {}
 
     /**
      * @param array $params
@@ -81,8 +85,8 @@ abstract class Post_Model extends Active_Model {
         $meta_keys  = $this->get_attributes_meta_keys();
 
         $post_id = empty( $this->ID ) ?
-            wp_insert_post( $attributes, true ) :
-            wp_update_post( $attributes, true );
+            wp_insert_post( $attributes, true, false ) :
+            wp_update_post( $attributes, true, false );
 
         if ( empty( $post_id ) || is_wp_error( $post_id ) ) {
             return false;
@@ -109,7 +113,8 @@ abstract class Post_Model extends Active_Model {
      * @return \WP_Error|\WP_Post_Type
      */
     public static function register( array $args = array() ) {
-        $post_type = ( new static() )->post_type;
+        $model     = new static();
+        $post_type = $model->post_type;
         $args      = array_merge( array(
             'labels'             => array(
                 'name' => ucfirst( strtolower( $post_type ) ),
@@ -136,7 +141,19 @@ abstract class Post_Model extends Active_Model {
             ),
         ), $args );
 
+        $model->init();
+
         return register_post_type( $post_type, $args );
+    }
+
+    public function add_meta_box( string $controller ) {
+        /** @var Meta_Box_Controller $controller */
+        $controller = new $controller();
+
+        $controller->set_model( static::class );
+
+        add_action( 'add_meta_boxes_' . $this->post_type, array( $controller, 'init' ) );
+        add_action( 'wp_after_insert_post', array( $controller, 'before_save' ), 10, 2 );
     }
 
 }

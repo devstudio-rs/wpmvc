@@ -38,4 +38,21 @@ abstract class Component {
         return get_object_vars( $this );
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function get_attribute( string $name ) {
+        return $this->{ $name };
+    }
+
+    /**
+     * @return string
+     */
+    public function get_class_name() : string {
+        $class_name = explode( '\\', get_class( $this ) );
+
+        return end( $class_name );
+    }
+
 }

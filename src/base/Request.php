@@ -14,13 +14,9 @@ abstract class Request extends Component {
      * @param bool $safe
      * @return array|mixed|null
      */
-    public function request( string $method = 'get', string $attribute = null, $default = null, bool $safe = true ) {
+    public function request( string $method = 'get', string $attribute = null, $default = null ) {
         $params = strtolower( $method ) === static::REQUEST_GET ?
             $_GET : $_POST;
-
-        if ( $safe ) {
-            $params = array_map( 'sanitize_text_field', $params );
-        }
 
         if ( ! isset( $attribute ) ) {
             return $params;
@@ -39,8 +35,8 @@ abstract class Request extends Component {
      * @param bool $safe
      * @return array|mixed|null
      */
-    public function get( string $attribute = null, $default = null, bool $safe = true ) {
-        return $this->request( static::REQUEST_GET, $attribute, $default, $safe );
+    public function get( string $attribute = null, $default = null ) {
+        return $this->request( static::REQUEST_GET, $attribute, $default );
     }
 
     /**
@@ -50,7 +46,7 @@ abstract class Request extends Component {
      * @return array|mixed|null
      */
     public function post( string $attribute = null, $default = null, bool $safe = true ) {
-        return $this->request( static::REQUEST_POST, $attribute, $default, $safe );
+        return $this->request( static::REQUEST_POST, $attribute, $default );
     }
 
 }
