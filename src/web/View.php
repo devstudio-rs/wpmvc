@@ -14,7 +14,11 @@ class View extends \wpmvc\base\View {
     public function __construct( array $config ) {
         $this->config = $config;
 
-        add_action( 'init', array( $this, 'init' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'register_styles' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
+
+        add_filter( 'style_loader_src',   array( $this, 'style_script_loader' ), 20 );
+        add_filter( 'script_loader_src',  array( $this, 'style_script_loader' ), 20 );
     }
 
     /**
@@ -22,10 +26,7 @@ class View extends \wpmvc\base\View {
      *
      * @return void
      */
-    public function init() {
-        add_action( 'wp_enqueue_scripts', array( $this, 'register_styles' ) );
-        add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
-    }
+    public function init() {}
 
     /**
      * Register styles from the config.
@@ -83,6 +84,21 @@ class View extends \wpmvc\base\View {
 
             wp_enqueue_script( $asset['handle'], App::alias( $asset['src'] ), $asset['deps'], $asset['ver'], $asset['media'] );
         }
+    }
+
+    /**
+     * @param string $src
+     * @return string
+     */
+    public function style_script_loader( string $src ) : string {
+        $clean_src = remove_query_arg( 'ver', $src );
+        $path      = wp_parse_url( $src, PHP_URL_PATH );
+
+        if ( $modified_time = @filemtime( untrailingslashit( ABSPATH ) . $path ) ) {
+            return add_query_arg( 'v', sha1( $modified_time ), $clean_src );
+        }
+
+        return $src;
     }
 
 }

@@ -9,9 +9,7 @@ abstract class App extends Component {
      */
     protected static $config = array();
 
-    /**
-     * @var Request
-     */
+    /** @var \wpmvc\web\Request */
     public $request;
 
     /** @var \wpmvc\web\Router */
@@ -20,9 +18,7 @@ abstract class App extends Component {
     /** @var \wpmvc\web\View */
     public $view;
 
-    /**
-     * @var Controller
-     */
+    /** @var \wpmvc\web\Controller */
     public $controller;
 
     public function __construct( array $config = array() ) {
