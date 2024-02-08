@@ -9,6 +9,9 @@ abstract class App extends Component {
      */
     protected static $config = array();
 
+    /** @var array  */
+    public $params = array();
+
     /** @var \wpmvc\web\Request */
     public $request;
 
@@ -37,7 +40,10 @@ abstract class App extends Component {
             'domain'     => 'default',
             'aliases'    => array(),
             'components' => array(),
+            'params'     => array(),
         ), $config );
+
+        $this->params = static::$config['params'];
     }
 
     /**
