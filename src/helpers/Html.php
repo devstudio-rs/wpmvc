@@ -7,6 +7,22 @@ use wpmvc\models\Post_Model;
 class Html {
 
     /**
+     * @param string $name
+     * @param string $content
+     * @param array $options
+     * @return string
+     */
+    public static function tag( string $name, string $content = '', array $options = array() ) : string {
+        $attributes = array();
+
+        foreach ( $options as $attribute => $value ) {
+            $attributes[] = sprintf( '%s="%s"', $attribute, $value );
+        }
+
+        return sprintf( '<%s %s>%s</%s>', $name, implode( ' ', $attributes ), $content, $name );
+    }
+
+    /**
      * @param string $type
      * @param string $name
      * @param array $options
