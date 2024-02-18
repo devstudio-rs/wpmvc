@@ -16,7 +16,47 @@ abstract class Post_Model extends Active_Model {
     public $post_type    = 'post';
     public $post_status  = self::STATUS_DRAFT;
 
-    public function init() {}
+    /**
+     * Trigger initialization after custom post type is registered.
+     *
+     * @return void
+     */
+    protected function init() {}
+
+    /**
+     * Return $args values for register_post_type.
+     *
+     * @return array
+     */
+    protected function registry() : array {
+        return array();
+    }
+
+    /**
+     * @return array
+     */
+    protected function registry_labels() : array {
+        return array();
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function registry_supports() : array {
+        return array(
+            'title',
+            'editor',
+            'excerpt',
+            'thumbnail',
+        );
+    }
+
+    /**
+     * @return array
+     */
+    protected function registry_rewrite() : array {
+        return array();
+    }
 
     /**
      * @param array $params
@@ -108,42 +148,24 @@ abstract class Post_Model extends Active_Model {
         return wp_delete_post( $this->ID );
     }
 
-    /**
-     * @param array $args
-     * @return \WP_Error|\WP_Post_Type
-     */
-    public static function register( array $args = array() ) {
-        $model     = new static();
+    public static function register() {
+        $model    = new static();
+        $registry = $model->registry();
+
+        if ( empty( $registry ) ) {
+            return false;
+        }
+
         $post_type = $model->post_type;
         $args      = array_merge( array(
-            'labels'             => array(
-                'name' => ucfirst( strtolower( $post_type ) ),
-            ),
-            'public'             => true,
-            'publicly_queryable' => true,
-            'show_ui'            => true,
-            'show_in_menu'       => true,
-            'show_in_rest'       => true,
-            'query_var'          => true,
-            'rewrite'            => array(
-                'slug'       => $post_type,
-                'with_front' => false,
-            ),
-            'capability_type'    => 'post',
-            'has_archive'        => true,
-            'hierarchical'       => false,
-            'menu_position'      => 10,
-            'supports'           => array(
-                'title',
-                'editor',
-                'excerpt',
-                'thumbnail',
-            ),
-        ), $args );
+            'labels'    => $model->registry_labels(),
+            'supports'  => $model->registry_supports(),
+            'rewrite'   => $model->registry_rewrite(),
+        ), $registry );
+
+        register_post_type( $post_type, $args );
 
         $model->init();
-
-        return register_post_type( $post_type, $args );
     }
 
     /**
