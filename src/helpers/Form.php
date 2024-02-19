@@ -46,6 +46,13 @@ class Form extends \wpmvc\base\Component {
     public function render() : string {
         $output = $this->template;
 
+        if ( empty( $this->parts['{label}'] ) ) {
+            $this->parts['{label}'] = Html::tag( 'label', $this->model->get_attribute_label( $this->attribute ), array(
+                'for'   => $this->attribute,
+                'class' => 'form-label',
+            ) );
+        }
+
         foreach ( $this->parts as $part => $element ) {
             $output = str_replace( $part, $element, $output );
         }

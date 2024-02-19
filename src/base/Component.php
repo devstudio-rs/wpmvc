@@ -55,4 +55,28 @@ abstract class Component {
         return end( $class_name );
     }
 
+    /**
+     * Define array of labels for defines attributes.
+     *
+     * @return array
+     */
+    public function attribute_labels() : array {
+        return array();
+    }
+
+    /**
+     * @param string $attribute
+     * @return string
+     */
+    public function get_attribute_label( string $attribute ) : string {
+        $label  = ucfirst( strtolower( str_replace( '_', '', $attribute ) ) );
+        $labels = $this->attribute_labels();
+
+        if ( empty( $labels[ $attribute ] ) ) {
+            return $label;
+        }
+
+        return $labels[ $attribute ];
+    }
+
 }
