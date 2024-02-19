@@ -2,6 +2,8 @@
 
 namespace wpmvc\helpers;
 
+use wpmvc\models\Post_Model;
+
 class Form extends \wpmvc\base\Component {
 
     /**
@@ -18,6 +20,16 @@ class Form extends \wpmvc\base\Component {
      * @var string[]
      */
     public $input_options = array( 'class' => 'form-control' );
+
+    /**
+     * @var null|Post_Model
+     */
+    public $model;
+
+    /**
+     * @var string
+     */
+    public $attribute;
 
     /**
      * @var array
@@ -68,11 +80,16 @@ class Form extends \wpmvc\base\Component {
     }
 
     /**
+     * @param Post_Model $model
+     * @param string $attribute
      * @param array $options
      * @return static
      */
-    public static function field( array $options = array() ) : self {
+    public static function field( Post_Model $model, string $attribute, array $options = array() ) : self {
         $field = new static();
+
+        $field->set_attribute( 'model',     $model );
+        $field->set_attribute( 'attribute', $attribute );
 
         $field->field_options = array_merge( $field->field_options, $options );
 
@@ -84,7 +101,10 @@ class Form extends \wpmvc\base\Component {
      * @return $this
      */
     public function label( string $label ) : self {
-        $this->parts['{label}'] = Html::tag( 'label', $label );
+        $this->parts['{label}'] = Html::tag( 'label', $label, array(
+            'for'   => $this->attribute,
+            'class' => 'form-label',
+        ) );
 
         return $this;
     }
@@ -93,8 +113,32 @@ class Form extends \wpmvc\base\Component {
      * @param array $options
      * @return $this
      */
-    public function text_input( array $options = array() ) : self {
-        $this->parts['{input}'] = Html::input( 'text', 'test', array_merge( $this->input_options, $options ) );
+    public function input_text( array $options = array() ) : self {
+        $this->parts['{input}'] = Html::active_input(
+            $this->model,
+            $this->attribute,
+            'text',
+            array_merge(
+                $this->input_options,
+                array( 'id' => $this->attribute ),
+                $options
+            )
+        );
+
+        return $this;
+    }
+
+    public function select( array $items = array(), array $options = array() ) : self {
+        $this->parts['{input}'] = Html::active_select(
+            $this->model,
+            $this->attribute,
+            $items,
+            array_merge(
+                $this->input_options,
+                array( 'id' => $this->attribute ),
+                $options
+            )
+        );
 
         return $this;
     }
