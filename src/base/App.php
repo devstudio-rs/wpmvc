@@ -40,6 +40,7 @@ abstract class App extends Component {
             'domain'     => 'default',
             'aliases'    => array(),
             'components' => array(),
+            'options'    => array(),
             'params'     => array(),
         ), $config );
 

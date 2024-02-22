@@ -105,4 +105,22 @@ class Html {
         return static::select( $name, $model->get_attribute( $attribute ), $items, $options );
     }
 
+    /**
+     * @param string $name
+     * @param string|null $value
+     * @param array $options
+     * @return string
+     */
+    public static function textarea( string $name = '', string $value = null, array $options = array() ) : string {
+        $attributes = array(
+            sprintf( 'name="%s"', $name ),
+        );
+
+        foreach ( $options as $attribute => $attribute_value ) {
+            $attributes[] = sprintf( '%s="%s"', $attribute, $attribute_value );
+        }
+
+        return sprintf( '<textarea %s>%s</textarea>', implode( ' ', $attributes ), $value );
+    }
+
 }
