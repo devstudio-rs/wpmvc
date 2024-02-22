@@ -24,6 +24,9 @@ abstract class App extends Component {
     /** @var \wpmvc\web\Controller */
     public $controller;
 
+    /** @var \wpmvc\web\Options */
+    public $options;
+
     public function __construct( array $config = array() ) {
         $this->set_config( $config );
 
@@ -53,14 +56,20 @@ abstract class App extends Component {
      * @return void
      */
     private function setup_components() {
-        $this->router = new \wpmvc\web\Router();
+        $components = $this->get_components();
 
-        if ( empty( static::$config['components'] ) ) {
-            return;
+        if ( ! empty( static::$config['components'] ) ) {
+            foreach ( static::$config['components'] as $component_id => $component ) {
+                $components[ $component_id ] = ! empty( $components[ $component_id ] ) ?
+                    array_merge(
+                        $components[ $component_id ],
+                        $component
+                    ) : $component;
+            }
         }
 
-        foreach ( static::$config['components'] as $component => $params ) {
-            $this->{ $component } = new $params['class']( $params );
+        foreach ( $components as $component_id => $component ) {
+            $this->{ $component_id } = new $component['class']( $component );
         }
     }
 
@@ -97,6 +106,26 @@ abstract class App extends Component {
      */
     public function get_config() : array {
         return static::$config;
+    }
+
+    private function get_components() : array {
+        return array(
+            'router' => array(
+                'class' => \wpmvc\web\Router::class,
+            ),
+            'request' => array(
+                'class' => \wpmvc\web\Request::class,
+            ),
+            'view' => array(
+                'class'  => \wpmvc\web\View::class,
+                'assets' => array(),
+            ),
+            'options' => array(
+                'class'   => \wpmvc\web\Options::class,
+                'label'   => __( 'Options', 'wpmvc' ),
+                'options' => array(),
+            ),
+        );
     }
 
 }
