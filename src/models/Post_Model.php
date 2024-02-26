@@ -105,7 +105,37 @@ abstract class Post_Model extends Active_Model {
         return $this;
     }
 
-    public function all() {}
+    /**
+     * @return array
+     */
+    public function all() : array {
+        $query = $this->query( array_merge( $this->query_params, array(
+            'fields' => 'ids',
+        ) ) );
+
+        if ( ! $query->have_posts() ) {
+            return array();
+        }
+
+        $items = array();
+
+        foreach ( $query->posts as $post_id ) {
+            $items[] = static::find_one( $post_id );
+        }
+
+        return $items;
+    }
+
+    /**
+     * @return $this
+     */
+    public function published() : self {
+        $this->query_params = array_merge( $this->query_params, array(
+            'post_status' => static::STATUS_PUBLISH,
+        ) );
+
+        return $this;
+    }
 
     /**
      * @return array

@@ -35,6 +35,15 @@ abstract class Active_Model extends Model implements Active_Model_Interface {
     }
 
     /**
+     * @param array $params
+     * @return array
+     */
+    public static function find_all( array $params = array() ) : array {
+        return static::find( $params )
+            ->all();
+    }
+
+    /**
      * @param array $attributes
      * @return bool
      */
