@@ -201,24 +201,23 @@ abstract class Post_Model extends Active_Model {
     /**
      * @param string $controller
      * @param string $title
-     * @param string|array|\WP_Screen $screen
-     * @param string $context
-     * @param string $priority
-     * @param array $callback_args
+     * @param array $args
      * @return void
      */
-    public function add_meta_box( string $controller, string $title, $screen = null, string $context = 'advanced', string $priority = 'default', $callback_args = null ) {
+    public function add_meta_box( string $controller, string $title, array $args = array() ) {
         /** @var Meta_Box_Controller $controller */
         $controller = new $controller();
 
-        $controller->set_attributes( array(
+        $args = array_merge( array(
             'title'         => $title,
             'model'         => static::class,
-            'screen'        => $screen,
-            'context'       => $context,
-            'priority'      => $priority,
-            'callback_args' => $callback_args,
-        ) );
+            'screen'        => null,
+            'context'       => 'advanced',
+            'priority'      => 'default',
+            'callback_args' => null,
+        ), $args );
+
+        $controller->set_attributes( $args );
 
         add_action( sprintf( 'add_meta_boxes_%s', $this->post_type ), array( $controller, 'init' ) );
         add_action( 'wp_after_insert_post', array( $controller, 'before_save' ), 10, 2 );
