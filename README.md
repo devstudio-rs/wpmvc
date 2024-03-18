@@ -35,6 +35,22 @@ class Event extends \wpmvc\models\Post_Model {
     // Example of custom attributes with default values.
     public $event_date     = 1707422767;
     public $event_location = 'Bratislava';
+    
+    public function registry() : array{
+        return array(
+            'public'             => true,
+            'publicly_queryable' => true,
+            'show_ui'            => true,
+            ...
+        );
+    }
+    
+    public function registry_labels() : array {
+        return array(
+            'name' => __( 'Event' ),
+            ...
+        );
+    }
 
 }
 ```
@@ -75,6 +91,46 @@ Event::register( array(
         ...
     ),
 ) );
+```
+
+### Taxonomy Models
+
+```php
+class Event_Category extends \wpmvc\models\Taxonomy_Model {
+
+    public $taxonomy = 'event-category';
+
+    public function registry() : array {
+        return array(
+            'hierarchical'      => true,
+            'public'            => true,
+            'show_ui'           => true,
+            'show_admin_column' => true,
+            'query_var'         => true,
+            'show_in_rest'      => true,
+        );
+    }
+
+    public function registry_labels() : array {
+        return array(
+            'name' => __( 'Event Category' ),
+            ...
+        );
+    }
+
+    public function registry_object_type() : array {
+        return array( 'event' );
+    }
+
+}
+```
+
+Search posts by taxonomy.
+
+```php
+$events = Event::find()
+    ->where_taxonomy( Event_Category::class, array( 'slug' => 'taxonomy_slug' ) )
+    ->all();
 ```
 
 ## Controllers
@@ -147,3 +203,5 @@ class Event extends \wpmvc\models\Post_Model {
 
 }
 ```
+
+

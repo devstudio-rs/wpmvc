@@ -75,4 +75,29 @@ abstract class Active_Model extends Model implements Active_Model_Interface {
         return $loaded;
     }
 
+    /**
+     * @param string|Taxonomy_Model $taxonomy
+     * @param array $args
+     * @return self
+     */
+    public function where_taxonomy( $taxonomy, array $args = array() ) : self {
+        if ( class_exists( $taxonomy ) ) {
+            $taxonomy = (new $taxonomy())->taxonomy;
+        }
+
+        if ( empty( $this->query_params['tax_query'] ) ) {
+            $this->query_params['tax_query'] = array();
+        }
+
+        $this->query_params['tax_query'][] = array(
+            'taxonomy' => $taxonomy,
+            'field'    => current( array_keys( $args ) ),
+            'terms'    => current( array_values( $args ) ),
+            'operator' => 'IN',
+            'include_children' => true,
+        );
+
+        return $this;
+    }
+
 }
