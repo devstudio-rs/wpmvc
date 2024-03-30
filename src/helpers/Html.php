@@ -63,7 +63,11 @@ class Html {
      * @param array $options
      * @return string
      */
-    public static function select( string $name = '', string $selection = null, array $items = array(), array $options = array() ) : string {
+    public static function select( string $name = '', $selection = null, array $items = array(), array $options = array() ) : string {
+        if ( ! empty( $options['multiple'] ) ) {
+            $name = sprintf( '%s[]', $name );
+        }
+
         $attributes = array(
             sprintf( 'name="%s"', $name ),
         );
@@ -77,11 +81,13 @@ class Html {
                 ( ! empty( $options['prompt'] ) ? $options['prompt'] : __( 'Please select...' ) ) ),
         );
 
+        $selection = is_array( $selection ) ? $selection : array( $selection );
+
         if ( ! empty( $items ) ) {
             foreach ( $items as $value => $label ) {
                 $select_options[] = sprintf( '<option value="%s" %s>%s</option>',
                     $value,
-                    ( $value == $selection ? 'selected' : '' ),
+                    ( in_array( $value, $selection ) ? 'selected' : '' ),
                     $label
                 );
             }
