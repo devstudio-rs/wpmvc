@@ -8,6 +8,9 @@ class Array_Helper {
         $items = array();
 
         foreach ( $array as $item ) {
+            // Convert object to array.
+            $item = (array) $item;
+
             $items[ $item[ $key ] ] = $item[ $value ];
         }
 
