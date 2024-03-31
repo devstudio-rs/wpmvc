@@ -150,7 +150,11 @@ abstract class Post_Model extends Active_Model {
     /**
      * @return bool
      */
-    public function save() : bool {
+    public function save( $validate = true ) : bool {
+        if ( $validate && ! $this->validate() ) {
+            return false;
+        }
+
         $attributes = $this->get_attributes();
         $meta_keys  = $this->get_attributes_meta_keys();
 
