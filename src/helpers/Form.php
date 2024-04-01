@@ -3,6 +3,7 @@
 namespace wpmvc\helpers;
 
 use wpmvc\App;
+use wpmvc\base\Model;
 use wpmvc\models\Post_Model;
 
 class Form extends \wpmvc\base\Component {
@@ -100,12 +101,12 @@ class Form extends \wpmvc\base\Component {
     }
 
     /**
-     * @param $model
+     * @param Model $model
      * @param string $attribute
      * @param array $options
      * @return static
      */
-    public static function field( $model, string $attribute, array $options = array() ) : self {
+    public static function field( Model $model, string $attribute, array $options = array() ) : self {
         $field = new static();
 
         $field->set_attribute( 'model',     $model );

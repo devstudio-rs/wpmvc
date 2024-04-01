@@ -2,6 +2,7 @@
 
 namespace wpmvc\helpers;
 
+use wpmvc\base\Model;
 use wpmvc\models\Post_Model;
 
 class Html {
@@ -42,13 +43,13 @@ class Html {
     }
 
     /**
-     * @param Post_Model $model
+     * @param Model $model
      * @param string $attribute
      * @param string $type
      * @param array $options
      * @return string
      */
-    public static function active_input( Post_Model $model, string $attribute, string $type = 'text', array $options = array() ) : string {
+    public static function active_input( Model $model, string $attribute, string $type = 'text', array $options = array() ) : string {
         $name = sprintf( '%s[%s]', $model->get_class_name(), $attribute );
 
         $options['value'] = $model->get_attribute( $attribute );
