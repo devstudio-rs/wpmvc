@@ -2,7 +2,6 @@
 
 namespace wpmvc\helpers;
 
-use wpmvc\App;
 use wpmvc\base\Model;
 use wpmvc\models\Post_Model;
 
@@ -122,6 +121,10 @@ class Form extends \wpmvc\base\Component {
      * @return $this
      */
     public function label( string $label ) : self {
+        if ( empty( $label ) ) {
+            return $this;
+        }
+
         $this->parts['{label}'] = Html::tag( 'label', $label, array(
             'for'   => $this->attribute,
             'class' => 'form-label',
