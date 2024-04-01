@@ -63,6 +63,8 @@ class View extends \wpmvc\base\View {
      * @return void
      */
     public function register_scripts() {
+        $this->register_frontend_assets();
+
         if ( empty( $this->config['assets'] ) ) {
             return;
         }
@@ -99,6 +101,15 @@ class View extends \wpmvc\base\View {
         }
 
         return $src;
+    }
+
+    private function register_frontend_assets() {
+        wp_register_script(
+            'wpmvc-form',
+            sprintf( '%s/assets/js/wpmvc-form.js', App::$base_path ),
+            array( 'jquery' ),
+            App::$version
+        );
     }
 
 }

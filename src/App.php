@@ -70,6 +70,8 @@ class App extends \wpmvc\base\App {
                 continue;
             }
 
+            http_response_code( 200 );
+
             $this->controller->action = $action;
             $this->controller->before_action();
 

@@ -107,7 +107,31 @@ abstract class Model extends Component {
      * @return array
      */
     public function get_errors() : array {
-        return $this->errors;
+        if ( empty( $this->errors ) ) {
+            return array();
+        }
+
+        $grouped_errors = array();
+
+        foreach ( $this->errors as $error ) {
+            $existing_index = array_search(
+                $error['attribute'],
+                array_column( $grouped_errors, 'attribute' )
+            );
+
+            if ( $existing_index === false ) {
+                $grouped_errors[] = array(
+                    'attribute' => $error['attribute'],
+                    'messages'  => array( $error['message'] ),
+                );
+            }
+
+            if ( $existing_index !== false ) {
+                $grouped_errors[ $existing_index ]['messages'][] = $error['message'];
+            }
+        }
+
+        return $grouped_errors;
     }
 
     /**
@@ -122,6 +146,16 @@ abstract class Model extends Component {
             'attribute' => $attribute,
             'message'	=> $message,
         );
+    }
+
+    public function to_response() {
+        $errors = $this->get_errors();
+
+        if ( empty( $errors ) ) {
+            wp_send_json_success();
+        }
+
+        wp_send_json_error( $errors );
     }
 
 }

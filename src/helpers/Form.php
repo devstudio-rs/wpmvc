@@ -2,6 +2,7 @@
 
 namespace wpmvc\helpers;
 
+use wpmvc\App;
 use wpmvc\models\Post_Model;
 
 class Form extends \wpmvc\base\Component {
@@ -37,6 +38,8 @@ class Form extends \wpmvc\base\Component {
     public $parts = array();
 
     public function __toString() {
+        wp_enqueue_script( 'wpmvc-form' );
+
         return $this->render();
     }
 
@@ -57,6 +60,10 @@ class Form extends \wpmvc\base\Component {
             $output = str_replace( $part, $element, $output );
         }
 
+        $this->field_options = array_merge( $this->field_options, array(
+            'data-attribute' => $this->attribute,
+        ) );
+
         return Html::tag( 'div', $output, $this->field_options );
     }
 
@@ -66,9 +73,15 @@ class Form extends \wpmvc\base\Component {
      */
     public static function start( array $options = array() ) : string {
         $options = array_merge( array(
+            'class'  => '',
             'action' => '',
             'method' => 'post',
         ), $options );
+
+        $options['class'] = trim( implode( ' ', array_merge(
+            explode( ' ', $options['class'] ),
+            array( 'wpmvc-form' )
+        ) ) );
 
         $attributes = array();
 
