@@ -111,6 +111,11 @@ class Form extends \wpmvc\base\Component {
         $field->set_attribute( 'model',     $model );
         $field->set_attribute( 'attribute', $attribute );
 
+        // Make option to change template trough field options.
+        if ( ! empty( $options['template'] ) ) {
+            $field->set_attribute( 'template', $options['template'] );
+        }
+
         $field->field_options = array_merge( $field->field_options, $options );
 
         return $field;
@@ -121,10 +126,6 @@ class Form extends \wpmvc\base\Component {
      * @return $this
      */
     public function label( string $label ) : self {
-        if ( empty( $label ) ) {
-            return $this;
-        }
-
         $this->parts['{label}'] = Html::tag( 'label', $label, array(
             'for'   => $this->attribute,
             'class' => 'form-label',
