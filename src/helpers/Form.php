@@ -100,12 +100,12 @@ class Form extends \wpmvc\base\Component {
     }
 
     /**
-     * @param Post_Model $model
+     * @param $model
      * @param string $attribute
      * @param array $options
      * @return static
      */
-    public static function field( Post_Model $model, string $attribute, array $options = array() ) : self {
+    public static function field( $model, string $attribute, array $options = array() ) : self {
         $field = new static();
 
         $field->set_attribute( 'model',     $model );
