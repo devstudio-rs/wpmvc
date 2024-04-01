@@ -147,10 +147,14 @@ abstract class Post_Model extends Active_Model {
         );
     }
 
+    public function before_save() {}
+
     /**
      * @return bool
      */
     public function save( $validate = true ) : bool {
+        $this->before_save();
+
         if ( $validate && ! $this->validate() ) {
             return false;
         }
