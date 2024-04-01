@@ -147,7 +147,19 @@ abstract class Post_Model extends Active_Model {
         );
     }
 
+    /**
+     * Triggered before saving validation starts.
+     *
+     * @return void
+     */
     public function before_save() {}
+
+    /**
+     * Triggered after model is saved and provided with ID.
+     *
+     * @return void
+     */
+    public function after_save() {}
 
     /**
      * @return bool
@@ -175,6 +187,8 @@ abstract class Post_Model extends Active_Model {
         foreach ( $meta_keys as $meta_key ) {
             update_post_meta( $this->ID, $meta_key, $attributes[ $meta_key ] );
         }
+
+        $this->after_save();
 
         return true;
     }
