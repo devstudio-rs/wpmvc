@@ -98,6 +98,12 @@ abstract class Taxonomy_Model extends Active_Model {
         return $items;
     }
 
+    public static function find_one( int $id ) {
+        return static::find( array(
+            'term_taxonomy_id' => $id,
+        ) )->one();
+    }
+
     public function save() : bool {
         $attributes = $this->get_attributes();
         $meta_keys  = $this->get_attributes_meta_keys();
