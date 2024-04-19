@@ -45,7 +45,10 @@ abstract class Taxonomy_Model extends Active_Model {
         $params = array_merge( array(
             'taxonomy'   => $this->taxonomy,
             'hide_empty' => false,
-        ), $params );
+        ), array_merge(
+            $this->query_params,
+            $params
+        ) );
 
         return new \WP_Term_Query( $params );
     }

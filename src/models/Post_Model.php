@@ -71,7 +71,10 @@ abstract class Post_Model extends Active_Model {
                 static::STATUS_PRIVATE,
                 static::STATUS_PUBLISH
             ),
-        ), $params );
+        ), array_merge(
+            $this->query_params,
+            $params
+        ) );
 
         return new \WP_Query( $params );
     }
