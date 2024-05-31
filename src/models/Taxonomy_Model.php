@@ -2,6 +2,8 @@
 
 namespace wpmvc\models;
 
+use wpmvc\web\Taxonomy_Controller;
+
 abstract class Taxonomy_Model extends Active_Model {
 
     public $term_id;
@@ -111,6 +113,8 @@ abstract class Taxonomy_Model extends Active_Model {
         $attributes = $this->get_attributes();
         $meta_keys  = $this->get_attributes_meta_keys();
 
+        $attributes['fire_after_hooks'] = false;
+
         $term = empty( $this->term_id ) ?
             wp_insert_term( $this->name, $this->taxonomy, $attributes ) :
             wp_update_term( $this->term_id, $this->taxonomy, $attributes );
@@ -146,5 +150,20 @@ abstract class Taxonomy_Model extends Active_Model {
             array_keys( get_class_vars( static::class ) ),
             array_keys( get_class_vars( self::class ) )
         );
+    }
+
+    public function add_meta_controller( string $controller, array $args = array() ) {
+        /** @var Taxonomy_Controller $controller */
+        $controller = new $controller();
+
+        $args = array_merge( array(
+            'model' => static::class,
+        ), $args );
+
+        $controller->set_attributes( $args );
+
+        add_action( sprintf( '%s_add_form_fields', $this->taxonomy ), array( $controller, 'before_add' ) );
+        add_action( sprintf( '%s_edit_form', $this->taxonomy ), array( $controller, 'before_edit' ) );
+        add_action( sprintf( 'saved_%s', $this->taxonomy ), array( $controller, 'before_save' ), 10, 4 );
     }
 }
