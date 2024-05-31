@@ -2,6 +2,7 @@
     "name": "devstudio-rs/wpmvc",
     "description": "WPMVC",
     "type": "framework",
+    "license": "GPL",
     "autoload": {
         "psr-4": {
             "wpmvc\\": "src/"
