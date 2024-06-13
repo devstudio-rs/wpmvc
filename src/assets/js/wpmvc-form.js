@@ -64,6 +64,7 @@
 
         this.process_response = function( response ) {
             _self.toggle_submit_button( false );
+            _self.trigger( 'response', response );
 
             if ( response.success ) {
                 _self.process_success_data( response.data );
