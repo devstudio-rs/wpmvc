@@ -101,12 +101,12 @@ class Html {
     }
 
     /**
-     * @param Post_Model $model
+     * @param Model $model
      * @param string $attribute
      * @param array $options
      * @return string
      */
-    public static function active_select( Post_Model $model, string $attribute, array $items = array(), array $options = array() ) : string {
+    public static function active_select( Model $model, string $attribute, array $items = array(), array $options = array() ) : string {
         $name = sprintf( '%s[%s]', $model->get_class_name(), $attribute );
 
         return static::select( $name, $model->get_attribute( $attribute ), $items, $options );
