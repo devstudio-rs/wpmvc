@@ -125,6 +125,8 @@ class Form extends \wpmvc\base\Component {
         // Make option to change template trough field options.
         if ( ! empty( $options['template'] ) ) {
             $field->set_attribute( 'template', $options['template'] );
+
+            unset( $options['template'] );
         }
 
         $field->field_options = array_merge( $field->field_options, $options );
