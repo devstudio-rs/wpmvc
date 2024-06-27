@@ -136,9 +136,17 @@ class Form extends \wpmvc\base\Component {
 
     /**
      * @param mixed $label
+     * @param array $options
      * @return $this
      */
-    public function label( $label ) {
+    public function label( $label, $options = array() ) {
+        if ( ! empty( $options ) ) {
+            $this->label_options = array_merge(
+                $this->label_options,
+                $options
+            );
+        }
+
         $this->label_options = array_merge( array(
             'for'   => $this->attribute,
             'class' => 'form-label',
