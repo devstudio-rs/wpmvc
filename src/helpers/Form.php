@@ -15,12 +15,12 @@ class Form extends \wpmvc\base\Component {
     /**
      * @var string[]
      */
-    public $field_options = array( 'class' => 'form-group' );
+    public $field_options = array();
 
     /**
      * @var string[]
      */
-    public $input_options = array( 'class' => 'form-control' );
+    public $input_options = array();
 
     /**
      * @var null|Post_Model
@@ -122,10 +122,16 @@ class Form extends \wpmvc\base\Component {
     }
 
     /**
-     * @param string $label
+     * @param mixed $label
      * @return $this
      */
-    public function label( string $label ) : self {
+    public function label( $label ) {
+        if ( $label === false ) {
+            $this->template = str_replace( '{label}', '', $this->template );
+
+            return $this;
+        }
+
         $this->parts['{label}'] = Html::tag( 'label', $label, array(
             'for'   => $this->attribute,
             'class' => 'form-label',
@@ -138,7 +144,15 @@ class Form extends \wpmvc\base\Component {
      * @param array $options
      * @return $this
      */
-    public function input_text( array $options = array() ) : self {
+    public function input_text( array $options = array() ) {
+        if ( empty( $this->field_options ) ) {
+            $this->field_options = array( 'class' => 'form-group' );
+        }
+
+        if ( empty( $this->input_options ) ) {
+            $this->input_options = array( 'class' => 'form-control' );
+        }
+
         $this->parts['{input}'] = Html::active_input(
             $this->model,
             $this->attribute,
@@ -153,7 +167,20 @@ class Form extends \wpmvc\base\Component {
         return $this;
     }
 
-    public function select( array $items = array(), array $options = array() ) : self {
+    /**
+     * @param array $items
+     * @param array $options
+     * @return $this
+     */
+    public function select( array $items = array(), array $options = array() ) {
+        if ( empty( $this->field_options ) ) {
+            $this->field_options = array( 'class' => 'form-group' );
+        }
+
+        if ( empty( $this->input_options ) ) {
+            $this->input_options = array( 'class' => 'form-control' );
+        }
+
         $this->parts['{input}'] = Html::active_select(
             $this->model,
             $this->attribute,
@@ -170,11 +197,16 @@ class Form extends \wpmvc\base\Component {
 
     /**
      * @param array $options
-     * @return self $this
+     * @return $this
      */
     public function checkbox( array $options = array() ) {
-        $this->field_options = array_merge( $this->field_options, array( 'class' => 'form-check' ) );
-        $this->input_options = array_merge( $this->field_options, array( 'class' => 'form-check-input' ) );
+        if ( empty( $this->field_options ) ) {
+            $this->field_options = array( 'class' => 'form-check' );
+        }
+
+        if ( empty( $this->input_options ) ) {
+            $this->input_options = array( 'class' => 'form-check-input' );
+        }
 
         $this->parts['{input}'] = Html::active_checkbox(
             $this->model,
