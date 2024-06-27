@@ -137,12 +137,6 @@ class Form extends \wpmvc\base\Component {
      * @return $this
      */
     public function label( $label ) {
-        if ( $label === false ) {
-            $this->template = str_replace( '{label}', '', $this->template );
-
-            return $this;
-        }
-
         $this->label_options = array_merge( array(
             'for'   => $this->attribute,
             'class' => 'form-label',
