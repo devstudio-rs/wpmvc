@@ -168,4 +168,25 @@ class Form extends \wpmvc\base\Component {
         return $this;
     }
 
+    /**
+     * @param array $options
+     * @return self $this
+     */
+    public function checkbox( array $options = array() ) {
+        $this->field_options = array_merge( $this->field_options, array( 'class' => 'form-check' ) );
+        $this->input_options = array_merge( $this->field_options, array( 'class' => 'form-check-input' ) );
+
+        $this->parts['{input}'] = Html::active_checkbox(
+            $this->model,
+            $this->attribute,
+            array_merge(
+                $this->input_options,
+                array( 'id' => $this->attribute ),
+                $options
+            )
+        );
+
+        return $this;
+    }
+
 }

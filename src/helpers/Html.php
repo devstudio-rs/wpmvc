@@ -130,4 +130,46 @@ class Html {
         return sprintf( '<textarea %s>%s</textarea>', implode( ' ', $attributes ), $value );
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @param bool $checked
+     * @param array $options
+     * @return string
+     */
+    public static function checkbox( $name, $value, $checked = false, $options = array() ) {
+        $attributes = array(
+            sprintf( 'type="%s"', 'checkbox' ),
+            sprintf( 'name="%s"', $name ),
+            sprintf( 'value="%s"', $value ),
+        );
+
+        if ( $checked ) {
+            $options['checked'] = 'checked';
+        }
+
+        foreach ( $options as $attribute => $value ) {
+            $attributes[] = sprintf( '%s="%s"', $attribute, $value );
+        }
+
+        return Html::tag( 'input', '', array(
+            'type'  => 'hidden',
+            'name'  => $name,
+            'value' => 0
+        ) ) . sprintf( '<input %s>', implode( ' ', $attributes ) );
+    }
+
+    /**
+     * @param \wpmvc\models\Model $model
+     * @param string $attribute
+     * @param array $options
+     * @return string
+     */
+    public static function active_checkbox( $model, $attribute, $options = array() ) {
+        $name    = sprintf( '%s[%s]', $model->get_class_name(), $attribute );
+        $checked = (int) $model->get_attribute( $attribute );
+
+        return static::checkbox( $name, 1, $checked, $options );
+    }
+
 }
