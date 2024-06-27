@@ -13,14 +13,19 @@ class Form extends \wpmvc\base\Component {
     public $template = "{label}{input}";
 
     /**
-     * @var string[]
+     * @var array
      */
     public $field_options = array();
 
     /**
-     * @var string[]
+     * @var array
      */
     public $input_options = array();
+
+    /**
+     * @var array
+     */
+    public $label_options = array();
 
     /**
      * @var null|Post_Model
@@ -49,11 +54,17 @@ class Form extends \wpmvc\base\Component {
     public function render() : string {
         $output = $this->template;
 
+        $this->label_options = array_merge( array(
+            'for'   => $this->attribute,
+            'class' => 'form-label',
+        ), $this->label_options );
+
         if ( empty( $this->parts['{label}'] ) ) {
-            $this->parts['{label}'] = Html::tag( 'label', $this->model->get_attribute_label( $this->attribute ), array(
-                'for'   => $this->attribute,
-                'class' => 'form-label',
-            ) );
+            $this->parts['{label}'] = Html::tag(
+                'label',
+                $this->model->get_attribute_label( $this->attribute ),
+                $this->label_options
+            );
         }
 
         foreach ( $this->parts as $part => $element ) {
@@ -132,10 +143,12 @@ class Form extends \wpmvc\base\Component {
             return $this;
         }
 
-        $this->parts['{label}'] = Html::tag( 'label', $label, array(
+        $this->label_options = array_merge( array(
             'for'   => $this->attribute,
             'class' => 'form-label',
-        ) );
+        ), $this->label_options );
+
+        $this->parts['{label}'] = Html::tag( 'label', $label, $this->label_options );
 
         return $this;
     }
@@ -206,6 +219,10 @@ class Form extends \wpmvc\base\Component {
 
         if ( empty( $this->input_options ) ) {
             $this->input_options = array( 'class' => 'form-check-input' );
+        }
+
+        if ( empty( $this->label_options ) ) {
+            $this->label_options = array( 'class' => 'form-check-label' );
         }
 
         $this->parts['{input}'] = Html::active_checkbox(
