@@ -105,7 +105,7 @@ abstract class Taxonomy_Model extends Active_Model {
 
     public static function find_one( int $id ) {
         return static::find( array(
-            'term_taxonomy_id' => $id,
+            'include' => array( $id ),
         ) )->one();
     }
 
