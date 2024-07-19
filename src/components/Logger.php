@@ -25,7 +25,7 @@ class Logger extends Component {
     public $directory   = '@upload.basedir/logs';
     public $group       = 'app';
     public $permissions = 0755;
-    public $size        = 0.1;
+    public $size        = 20;
 
     public function __construct( $attributes = array() ) {
         $this->set_attributes( $attributes );
