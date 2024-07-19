@@ -2,23 +2,21 @@
 
 namespace wpmvc;
 
-use wpmvc\models\Model;
+/**
+ * Class App
+ *
+ * @since 1.0.0
+ * @package wpmvc\base
+ *
+ * @property string $version
+ * @property self $app
+ * @property string $base_path
+ */
 
 class App extends \wpmvc\base\App {
 
-    /**
-     * @var string
-     */
-    public static $version = '0.0.1';
-
-    /**
-     * @var self
-     */
+    public static $version = '1.0.8';
     public static $app;
-
-    /**
-     * @var string
-     */
     public static $base_path;
 
     public function init() {
@@ -27,8 +25,8 @@ class App extends \wpmvc\base\App {
         }
 
         static::$app = $this;
+        static::setup();
 
-        add_action( 'init',                  array( $this, 'setup' ) );
         add_action( 'template_redirect',     array( $this, 'template_redirect' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
     }
@@ -40,6 +38,16 @@ class App extends \wpmvc\base\App {
         static::$base_path = implode( '/', array(
             content_url(),
             $dir_paths[1],
+        ) );
+
+        $uploads_dir = wp_get_upload_dir();
+
+        static::$config['aliases'] = array_merge( static::$config['aliases'], array(
+            '@content'        => content_url(),
+            '@upload.basedir' => $uploads_dir['basedir'],
+            '@upload.baseurl' => $uploads_dir['baseurl'],
+            '@upload.dir'     => $uploads_dir['path'],
+            '@upload.url'     => $uploads_dir['baseurl'],
         ) );
     }
 

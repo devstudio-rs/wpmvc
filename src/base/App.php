@@ -2,30 +2,34 @@
 
 namespace wpmvc\base;
 
+/**
+ * Class App
+ *
+ * @since 1.0.0
+ * @package wpmvc\base
+ *
+ * @property array $config
+ * @property array $params
+ * @property \wpmvc\web\Request $request
+ * @property \wpmvc\web\Router $router
+ * @property \wpmvc\web\View $view
+ * @property \wpmvc\web\Controller $controller
+ * @property \wpmvc\web\Options $options
+ * @property \wpmvc\components\Logger $logger
+ *
+ */
+
 abstract class App extends Component {
 
-    /**
-     * @var array
-     */
     protected static $config = array();
 
-    /** @var array  */
     public $params = array();
-
-    /** @var \wpmvc\web\Request */
     public $request;
-
-    /** @var \wpmvc\web\Router */
     public $router;
-
-    /** @var \wpmvc\web\View */
     public $view;
-
-    /** @var \wpmvc\web\Controller */
     public $controller;
-
-    /** @var \wpmvc\web\Options */
     public $options;
+    public $logger;
 
     public function __construct( array $config = array() ) {
         $this->set_config( $config );
@@ -78,14 +82,7 @@ abstract class App extends Component {
             return $value;
         }
 
-        $parts = explode( '/', $value );
-        $alias = $parts[0];
-
-        if ( empty( static::$config['aliases'][ $alias ] ) ) {
-            return $value;
-        }
-
-        return str_replace( $alias, static::$config['aliases'][ $alias ], $value );
+        return strtr( $value, static::$config['aliases'] );
     }
 
     /**
@@ -124,6 +121,9 @@ abstract class App extends Component {
                 'class'   => \wpmvc\web\Options::class,
                 'label'   => __( 'Options', 'wpmvc' ),
                 'options' => array(),
+            ),
+            'logger' => array(
+                'class' => \wpmvc\components\Logger::class,
             ),
         );
     }
