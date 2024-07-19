@@ -158,10 +158,11 @@ class Form extends \wpmvc\base\Component {
     }
 
     /**
+     * @param string $type
      * @param array $options
      * @return $this
      */
-    public function input_text( array $options = array() ) {
+    public function input( $type = 'text', $options = array() ) {
         if ( empty( $this->field_options ) ) {
             $this->field_options = array( 'class' => 'form-group' );
         }
@@ -173,7 +174,7 @@ class Form extends \wpmvc\base\Component {
         $this->parts['{input}'] = Html::active_input(
             $this->model,
             $this->attribute,
-            'text',
+            $type,
             array_merge(
                 $this->input_options,
                 array( 'id' => $this->attribute ),
@@ -182,6 +183,14 @@ class Form extends \wpmvc\base\Component {
         );
 
         return $this;
+    }
+
+    /**
+     * @param array $options
+     * @return $this
+     */
+    public function input_text( array $options = array() ) {
+        return $this->input( 'text', $options );
     }
 
     /**
