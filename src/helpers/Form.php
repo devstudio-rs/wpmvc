@@ -84,9 +84,10 @@ class Form extends \wpmvc\base\Component {
      */
     public static function start( array $options = array() ) : string {
         $options = array_merge( array(
-            'class'  => '',
-            'action' => '',
-            'method' => 'post',
+            'class'    => '',
+            'action'   => '',
+            'method'   => 'post',
+            'onsubmit' => 'return false;',
         ), $options );
 
         $options['class'] = trim( implode( ' ', array_merge(

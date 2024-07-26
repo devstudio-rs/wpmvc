@@ -21,12 +21,17 @@
             this.options.method = $( this ).attr( 'method' );
 
             this.events();
+            this.loaded();
         };
 
         this.events = function () {
             $( this ).on( 'submit', this.on_submit );
             $( '[data-attribute] :input', this ).on( 'change', this.on_input_change );
         }
+
+        this.loaded = function () {
+            $( this ).removeAttr( 'onsubmit' );
+        };
 
         this.on_submit = function ( e ) {
             e.preventDefault();
@@ -46,7 +51,10 @@
                 data:     data,
                 dataType: "json"
             } )
-                .done( _self.process_response );
+                .done( _self.process_response )
+                .always( function() {
+                    _self.toggle_submit_button( false );
+                } );
 
             return true;
         }
@@ -63,7 +71,6 @@
         }
 
         this.process_response = function( response ) {
-            _self.toggle_submit_button( false );
             _self.trigger( 'response', response );
 
             if ( response.success ) {
