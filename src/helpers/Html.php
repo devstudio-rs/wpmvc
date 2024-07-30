@@ -131,6 +131,18 @@ class Html {
     }
 
     /**
+     * @param Model $model
+     * @param string $attribute
+     * @param array $options
+     * @return string
+     */
+    public static function active_textarea( $model, $attribute, $options = array() ) {
+        $name = sprintf( '%s[%s]', $model->get_class_name(), $attribute );
+
+        return static::textarea( $name, $model->get_attribute( $attribute ), $options );
+    }
+
+    /**
      * @param string $name
      * @param mixed $value
      * @param bool $checked

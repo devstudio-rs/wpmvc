@@ -252,4 +252,30 @@ class Form extends \wpmvc\base\Component {
         return $this;
     }
 
+    /**
+     * @param array $options
+     * @return $this
+     */
+    public function textarea( $options = array() ) {
+        if ( empty( $this->field_options ) ) {
+            $this->field_options = array( 'class' => 'form-group' );
+        }
+
+        if ( empty( $this->input_options ) ) {
+            $this->input_options = array( 'class' => 'form-control' );
+        }
+
+        $this->parts['{input}'] = Html::active_textarea(
+            $this->model,
+            $this->attribute,
+            array_merge(
+                $this->input_options,
+                array( 'id' => $this->attribute ),
+                $options
+            )
+        );
+
+        return $this;
+    }
+
 }

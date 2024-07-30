@@ -14,8 +14,9 @@ extract( $args );
 
 <div class="wrap" style="max-width: 600px;">
     <?php echo Form::start( array(
-        'action' => 'options.php',
-        'method' => 'post',
+        'action'   => 'options.php',
+        'method'   => 'post',
+        'onsubmit' => '',
     ) ); ?>
 
     <?php settings_fields( $options['id'] ); ?>
