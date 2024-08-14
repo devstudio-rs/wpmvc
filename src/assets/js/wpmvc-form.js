@@ -87,6 +87,11 @@
 
         this.process_error_data = function ( data ) {
             $.each( data, function ( i, item ) {
+                if ( typeof item.attribute === 'undefined' ||
+                     typeof item.messages === 'undefined' ) {
+                    return;
+                }
+
                 let field = $( '[data-attribute="' + item.attribute + '"]', _self );
 
                 field
