@@ -5,6 +5,11 @@ namespace wpmvc\interfaces;
 interface Active_Model_Interface {
 
     /**
+     * @return int
+     */
+    public function get_id();
+
+    /**
      * @param array $params
      * @return \WP_Query
      */

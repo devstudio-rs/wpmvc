@@ -15,6 +15,27 @@ abstract class Post_Model extends Active_Model {
     public $ID;
     public $post_type    = 'post';
     public $post_status  = self::STATUS_DRAFT;
+    public $post_author;
+    public $post_date;
+    public $post_date_gmt;
+    public $post_content;
+    public $post_title;
+    public $post_excerpt;
+    public $comment_status;
+    public $ping_status;
+    public $post_password;
+    public $post_name;
+    public $to_ping;
+    public $pinged;
+    public $post_modified;
+    public $post_modified_gmt;
+    public $post_content_filtered;
+    public $post_parent;
+    public $guid;
+    public $menu_order;
+    public $post_mime_type;
+    public $comment_count;
+    public $filter;
 
     /**
      * Trigger initialization after custom post type is registered.
@@ -56,6 +77,43 @@ abstract class Post_Model extends Active_Model {
      */
     protected function registry_rewrite() : array {
         return array();
+    }
+
+    /**
+     * @return int
+     */
+    public function get_id() {
+        return $this->ID;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_title() {
+        return $this->post_title;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_content() {
+        return $this->post_content;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_link() {
+        return get_permalink( $this->ID );
+    }
+
+    /**
+     * @param string $size
+     * @param array $args
+     * @return string
+     */
+    public function get_thumbnail( $size = 'post-thumbnail', $args = array() ) {
+        return get_the_post_thumbnail( $this->ID, $size, $args );
     }
 
     /**

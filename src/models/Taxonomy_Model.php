@@ -10,6 +10,12 @@ abstract class Taxonomy_Model extends Active_Model {
     public $name;
     public $slug;
     public $taxonomy = 'category';
+    public $term_group;
+    public $term_taxonomy_id;
+    public $description;
+    public $parent = 0;
+    public $count = 0;
+    public $filter = 0;
 
     protected function init() {}
 
@@ -43,6 +49,31 @@ abstract class Taxonomy_Model extends Active_Model {
         $model->init();
     }
 
+    /**
+     * @return int
+     */
+    public function get_id() {
+        return $this->term_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_name() {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_description() {
+        return $this->description;
+    }
+
+    /**
+     * @param array $params
+     * @return \WP_Term_Query
+     */
     public function query( array $params = array() ) : \WP_Term_Query {
         $params = array_merge( array(
             'taxonomy'   => $this->taxonomy,
@@ -55,6 +86,9 @@ abstract class Taxonomy_Model extends Active_Model {
         return new \WP_Term_Query( $params );
     }
 
+    /**
+     * @return $this|mixed|null
+     */
     public function one() {
         $query = $this->query( array_merge( $this->query_params, array(
             'number' => 1,

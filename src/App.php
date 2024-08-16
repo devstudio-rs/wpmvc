@@ -15,7 +15,7 @@ namespace wpmvc;
 
 class App extends \wpmvc\base\App {
 
-    public static $version = '1.0.8';
+    public static $version = '1.0.11';
     public static $app;
     public static $base_path;
 
