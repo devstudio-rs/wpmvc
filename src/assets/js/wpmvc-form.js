@@ -53,6 +53,7 @@
             } )
                 .done( _self.process_response )
                 .always( function() {
+                    _self.process_always();
                     _self.toggle_submit_button( false );
                 } );
 
@@ -81,6 +82,10 @@
             if ( ! response.success ) {
                 _self.process_error_data( response.data );
             }
+        }
+
+        this.process_always = function() {
+            _self.trigger( 'onsubmit_always' );
         }
 
         this.process_success_data = function ( data ) {}
