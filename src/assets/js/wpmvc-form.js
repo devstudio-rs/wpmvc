@@ -88,7 +88,10 @@
             _self.trigger( 'onsubmit_always' );
         }
 
-        this.process_success_data = function ( data ) {}
+        this.process_success_data = function ( data ) {
+            $( 'input:visible, select:visible, textarea:visible', _self )
+                .val( '' );
+        }
 
         this.process_error_data = function ( data ) {
             $.each( data, function ( i, item ) {
