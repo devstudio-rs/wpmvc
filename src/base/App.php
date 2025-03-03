@@ -73,7 +73,11 @@ abstract class App extends Component {
         }
 
         foreach ( $components as $component_id => $component ) {
-            $this->{ $component_id } = new $component['class']( $component );
+            $component_class = $component['class'];
+
+            unset( $component['class'] );
+
+            $this->{ $component_id } = new $component_class( $component );
         }
     }
 
@@ -120,7 +124,7 @@ abstract class App extends Component {
             'options' => array(
                 'class'   => \wpmvc\web\Options::class,
                 'label'   => __( 'Options', 'wpmvc' ),
-                'options' => array(),
+                'config'  => array(),
             ),
             'logger' => array(
                 'class' => \wpmvc\components\Logger::class,
