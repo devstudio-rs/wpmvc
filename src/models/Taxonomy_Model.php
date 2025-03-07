@@ -6,7 +6,16 @@ use wpmvc\web\Taxonomy_Controller;
 
 abstract class Taxonomy_Model extends Active_Model {
 
-    public $taxonomy = 'category';
+    public $term_id;
+    public $name                = '';
+    public $slug                = '';
+    public $term_group          = '';
+    public $term_taxonomy_id    = 0;
+    public $taxonomy            = 'category';
+    public $description         = '';
+    public $parent              = 0;
+    public $count               = 0;
+    public $filter              = 'raw';
 
     protected function init() {}
 

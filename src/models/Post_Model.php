@@ -13,8 +13,29 @@ abstract class Post_Model extends Active_Model {
     const STATUS_TRASH   = 'trash';
 
     public $ID;
-    public $post_type    = 'post';
-    public $post_status  = self::STATUS_DRAFT;
+    public $post_author             = 0;
+    public $post_date               = '0000-00-00 00:00:00';
+    public $post_date_gmt           = '0000-00-00 00:00:00';
+    public $post_content            = '';
+    public $post_title              = '';
+    public $post_excerpt            = '';
+    public $post_status             = 'publish';
+    public $comment_status          = 'open';
+    public $ping_status             = 'open';
+    public $post_password           = '';
+    public $post_name               = '';
+    public $to_ping                 = '';
+    public $pinged                  = '';
+    public $post_modified           = '0000-00-00 00:00:00';
+    public $post_modified_gmt       = '0000-00-00 00:00:00';
+    public $post_content_filtered   = '';
+    public $post_parent             = 0;
+    public $guid                    = '';
+    public $menu_order              = 0;
+    public $post_type               = 'post';
+    public $post_mime_type          = '';
+    public $comment_count           = 0;
+    public $filter;
 
     /**
      * Trigger initialization after custom post type is registered.
