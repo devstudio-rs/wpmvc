@@ -5,6 +5,15 @@ namespace wpmvc\base;
 abstract class Component {
 
     /**
+     * Setup component attributes on construct.
+     *
+     * @param array $config
+     */
+    public function __construct( $config = array() ) {
+        $this->set_attributes( $config );
+    }
+
+    /**
      * @param array $attributes
      * @return bool
      */
