@@ -123,7 +123,7 @@ abstract class App extends Component {
             ),
             'options' => array(
                 'class'   => \wpmvc\web\Options::class,
-                'label'   => __( 'Options', 'wpmvc' ),
+                'label'   => 'Options',
                 'config'  => array(),
             ),
             'logger' => array(
