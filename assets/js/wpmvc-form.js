@@ -5,7 +5,9 @@
     } );
 
     $.fn.wpmvc_form = function( options ) {
-        let _self   = this;
+        let _self  = this;
+
+        this.fields = [];
 
         this.options = $.extend( {
             action: '',
@@ -31,6 +33,10 @@
 
         this.loaded = function () {
             $( this ).removeAttr( 'onsubmit' );
+
+            $( 'input, select, textarea, checkbox, radio', this ).each( function() {
+                _self.fields.push( $( this ) );
+            } );
         };
 
         this.on_submit = function ( e ) {
@@ -94,20 +100,37 @@
         }
 
         this.process_error_data = function ( data ) {
+            $.each( this.fields, function( i, item ) {
+                if ( item.val() === '' ) {
+                    return;
+                }
+
+                item.addClass( 'is-valid' );
+            } );
+
             $.each( data, function ( i, item ) {
                 if ( typeof item.attribute === 'undefined' ||
                      typeof item.messages === 'undefined' ) {
                     return;
                 }
 
-                let field = $( '[data-attribute="' + item.attribute + '"]', _self );
+                let field       = $( '[data-attribute="' + item.attribute + '"]', _self );
+                let feedback_id = item.attribute + '-feedback';
 
                 field
                     .addClass( _self.options.field_error_class );
 
+                $( 'input, select, textarea, checkbox, radio', field )
+                    .attr( 'aria-describedby', feedback_id )
+                    .removeClass( 'is-valid' )
+                    .addClass( 'is-invalid' );
+
                 field.append(
-                    $( '<div>', { class: _self.options.field_help_class } )
-                        .html( item.messages[0] )
+                    $( '<div>', {
+                        id:    feedback_id,
+                        class: _self.options.field_help_class + ' invalid-feedback'
+                    } )
+                        .html( item.messages.join( '<br>' ) )
                 );
             } );
         }
@@ -119,8 +142,15 @@
         }
 
         this.reset_field_error_classes = function () {
-            $( '[data-attribute]', _self )
+            let field = $( '[data-attribute]', _self );
+
+            field
                 .removeClass( _self.options.field_error_class );
+
+            $.each( this.fields, function( i, item ) {
+                item.removeClass( 'is-invalid' );
+                item.removeClass( 'is-valid' );
+            } );
         }
 
         this.reset_field_help_messages = function () {
