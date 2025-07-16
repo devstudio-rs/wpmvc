@@ -2,6 +2,7 @@
 
 namespace wpmvc\helpers;
 
+use wpmvc\App;
 use wpmvc\base\Model;
 use wpmvc\models\Post_Model;
 
@@ -94,6 +95,10 @@ class Form extends \wpmvc\base\Component {
             explode( ' ', $options['class'] ),
             array( 'wpmvc-form' )
         ) ) );
+
+        if ( ! empty( $options['action'] ) ) {
+            $options['action'] = App::alias( $options['action'] );
+        }
 
         $attributes = array();
 

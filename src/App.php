@@ -17,7 +17,9 @@ class App extends \wpmvc\base\App {
 
     public static $version = '1.0.11';
     public static $app;
+
     public static $base_path;
+    public static $base_url;
 
     public function init() {
         if ( static::$app !== null ) {
@@ -32,17 +34,15 @@ class App extends \wpmvc\base\App {
     }
 
     public static function setup() {
-        $wp_content_dir = str_replace( home_url( '/' ), '', content_url() );
-        $dir_paths      = explode( sprintf( '/%s/', $wp_content_dir ), __DIR__ );
-
-        static::$base_path = implode( '/', array(
-            content_url(),
-            $dir_paths[1],
-        ) );
+        static::$base_path = dirname( dirname( __FILE__ ) );
+        static::$base_url  = home_url( str_replace( ABSPATH, '', static::$base_path ) );
 
         $uploads_dir = wp_get_upload_dir();
 
-        static::$config['aliases'] = array_merge( static::$config['aliases'], array(
+        static::$config['aliases'] = wp_parse_args( static::$config['aliases'], array(
+            '@wpmvc.path'     => static::$base_path,
+            '@wpmvc.url'      => static::$base_url,
+            '@home'           => home_url(),
             '@content'        => content_url(),
             '@upload.basedir' => $uploads_dir['basedir'],
             '@upload.baseurl' => $uploads_dir['baseurl'],
@@ -90,7 +90,7 @@ class App extends \wpmvc\base\App {
     public static function admin_enqueue_scripts() {
         wp_enqueue_style(
             'wpmvc-admin',
-            sprintf( '%s/assets/css/wpmvc-admin.css', static::$base_path ),
+            static::alias( '@wpmvc.url/assets/css/wpmvc-admin.css' ),
             array(),
             static::$version
         );

@@ -106,7 +106,7 @@ class View extends \wpmvc\base\View {
     private function register_frontend_assets() {
         wp_register_script(
             'wpmvc-form',
-            sprintf( '%s/assets/js/wpmvc-form.js', App::$base_path ),
+            App::alias( '@wpmvc.url/assets/js/wpmvc-form.js' ),
             array( 'jquery' ),
             App::$version
         );
