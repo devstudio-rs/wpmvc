@@ -15,17 +15,13 @@ namespace wpmvc;
 
 class App extends \wpmvc\base\App {
 
-    public static $version = '1.0.20';
+    public static $version = '1.0.20.1';
     public static $app;
 
     public static $base_path;
     public static $base_url;
 
     public function init() {
-        if ( static::$app !== null ) {
-            return;
-        }
-
         static::$app = $this;
         static::setup();
 
