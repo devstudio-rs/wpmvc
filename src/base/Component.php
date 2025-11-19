@@ -2,7 +2,7 @@
 
 namespace wpmvc\base;
 
-abstract class Component {
+class Component {
 
     /**
      * Setup component attributes on construct.

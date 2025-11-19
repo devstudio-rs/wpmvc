@@ -19,7 +19,7 @@ namespace wpmvc\base;
  *
  */
 
-abstract class App extends Component {
+class App extends Component {
 
     protected static $config = array();
 

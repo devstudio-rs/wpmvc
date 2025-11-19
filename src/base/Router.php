@@ -2,7 +2,7 @@
 
 namespace wpmvc\base;
 
-abstract class Router extends Component {
+class Router extends Component {
 
     public $routes = array();
 

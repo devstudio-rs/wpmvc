@@ -2,7 +2,7 @@
 
 namespace wpmvc\base;
 
-abstract class Request extends Component {
+class Request extends Component {
 
     const REQUEST_GET   = 'get';
     const REQUEST_POST  = 'post';

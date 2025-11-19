@@ -4,7 +4,7 @@ namespace wpmvc\base;
 
 use wpmvc\validators\Validator;
 
-abstract class Model extends Component {
+class Model extends Component {
 
     protected $errors = array();
 

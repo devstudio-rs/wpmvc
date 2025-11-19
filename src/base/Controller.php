@@ -2,7 +2,7 @@
 
 namespace wpmvc\base;
 
-abstract class Controller extends Component {
+class Controller extends Component {
 
     /**
      * @var string

@@ -2,7 +2,7 @@
 
 namespace wpmvc\base;
 
-abstract class View extends Component {
+class View extends Component {
 
     public static function render( string $view, array $params = array() ) {
         global $wp_query;
