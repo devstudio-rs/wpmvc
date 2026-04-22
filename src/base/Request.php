@@ -11,7 +11,6 @@ class Request extends Component {
      * @param string $method
      * @param string $attribute
      * @param mixed $default
-     * @param bool $safe
      * @return array|mixed|null
      */
     public function request( string $method = 'get', string $attribute = null, $default = null ) {
@@ -42,10 +41,9 @@ class Request extends Component {
     /**
      * @param string|null $attribute
      * @param mixed $default
-     * @param bool $safe
      * @return array|mixed|null
      */
-    public function post( string $attribute = null, $default = null, bool $safe = true ) {
+    public function post( string $attribute = null, $default = null ) {
         return $this->request( static::REQUEST_POST, $attribute, $default );
     }
 

@@ -34,7 +34,7 @@ class Logger extends Component {
      * @return false|int
      */
     public function log( $message, $type, $group = null ) {
-        $group     = $group ?? $this->group;
+        $group     = preg_replace( '/[^a-zA-Z0-9_-]/', '', $group ?? $this->group );
         $directory = App::alias( $this->directory );
         $filename  = sprintf( '%s/%s.log', $directory, $group );
         $message   = sprintf( '[%s] %s: %s', date( 'Y-m-d H:i:s' ), $type, $message ) . PHP_EOL;

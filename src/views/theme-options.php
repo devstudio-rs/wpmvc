@@ -30,8 +30,8 @@ extract( $args );
 
     <?php foreach ( $options['items'] as $item ) : ?>
     <div class="form-group">
-        <label for="<?php esc_attr( $item['name'] ); ?>" class="form-label">
-            <?php echo $item['label']; ?>
+        <label for="<?php echo esc_attr( $item['name'] ); ?>" class="form-label">
+            <?php echo esc_html( $item['label'] ); ?>
         </label>
 
         <?php if ( in_array( $item['type'], array( 'text', 'password', 'email' ), true ) ) : ?>

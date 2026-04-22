@@ -17,7 +17,7 @@ class Html {
         $attributes = array();
 
         foreach ( $options as $attribute => $value ) {
-            $attributes[] = sprintf( '%s="%s"', $attribute, $value );
+            $attributes[] = sprintf( '%s="%s"', $attribute, esc_attr( $value ) );
         }
 
         return sprintf( '<%s %s>%s</%s>', $name, implode( ' ', $attributes ), $content, $name );
@@ -31,12 +31,12 @@ class Html {
      */
     public static function input( string $type = 'text', string $name = '', array $options = array() ) : string {
         $attributes = array(
-            sprintf( 'type="%s"', $type ),
-            sprintf( 'name="%s"', $name ),
+            sprintf( 'type="%s"', esc_attr( $type ) ),
+            sprintf( 'name="%s"', esc_attr( $name ) ),
         );
 
         foreach ( $options as $attribute => $value ) {
-            $attributes[] = sprintf( '%s="%s"', $attribute, $value );
+            $attributes[] = sprintf( '%s="%s"', $attribute, esc_attr( $value ) );
         }
 
         return sprintf( '<input %s>', implode( ' ', $attributes ) );
@@ -77,9 +77,9 @@ class Html {
             $attributes[] = sprintf( '%s="%s"', $attribute, $value );
         }
 
+        $prompt         = ! empty( $options['prompt'] ) ? esc_html( $options['prompt'] ) : esc_html__( 'Please select...' );
         $select_options = array(
-            sprintf( '<option value="">%s</option>',
-                ( ! empty( $options['prompt'] ) ? $options['prompt'] : __( 'Please select...' ) ) ),
+            sprintf( '<option value="">%s</option>', $prompt ),
         );
 
         $selection = is_array( $selection ) ? $selection : array( $selection );
@@ -87,9 +87,9 @@ class Html {
         if ( ! empty( $items ) ) {
             foreach ( $items as $value => $label ) {
                 $select_options[] = sprintf( '<option value="%s" %s>%s</option>',
-                    $value,
+                    esc_attr( $value ),
                     ( in_array( $value, $selection ) ? 'selected' : '' ),
-                    $label
+                    esc_html( $label )
                 );
             }
         }
@@ -120,12 +120,14 @@ class Html {
      */
     public static function textarea( string $name = '', string $value = null, array $options = array() ) : string {
         $attributes = array(
-            sprintf( 'name="%s"', $name ),
+            sprintf( 'name="%s"', esc_attr( $name ) ),
         );
 
         foreach ( $options as $attribute => $attribute_value ) {
             $attributes[] = sprintf( '%s="%s"', $attribute, $attribute_value );
         }
+
+        $value = ! empty( $value ) ? esc_textarea( $value ) : '';
 
         return sprintf( '<textarea %s>%s</textarea>', implode( ' ', $attributes ), $value );
     }
@@ -152,16 +154,16 @@ class Html {
     public static function checkbox( $name, $value, $checked = false, $options = array() ) {
         $attributes = array(
             sprintf( 'type="%s"', 'checkbox' ),
-            sprintf( 'name="%s"', $name ),
-            sprintf( 'value="%s"', $value ),
+            sprintf( 'name="%s"', esc_attr( $name ) ),
+            sprintf( 'value="%s"', esc_attr( $value ) ),
         );
 
         if ( $checked ) {
             $options['checked'] = 'checked';
         }
 
-        foreach ( $options as $attribute => $value ) {
-            $attributes[] = sprintf( '%s="%s"', $attribute, $value );
+        foreach ( $options as $attr => $attr_value ) {
+            $attributes[] = sprintf( '%s="%s"', $attr, esc_attr( $attr_value ) );
         }
 
         return Html::tag( 'input', '', array(

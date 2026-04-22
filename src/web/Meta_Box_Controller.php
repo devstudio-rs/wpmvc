@@ -55,12 +55,17 @@ class Meta_Box_Controller extends \wpmvc\base\Controller {
         add_meta_box(
             $this->id,
             $this->title,
-            function( $post ) {
+            function( $post ) use ( $post_type ) {
                 $model = $this->model::find_one( $post->ID );
 
                 if ( empty( $model ) ) {
                     $model = new $this->model();
                 }
+
+                wp_nonce_field(
+                    sprintf( 'wpmvc_meta_box_%s', $post_type ),
+                    sprintf( 'wpmvc_meta_box_%s', $post_type )
+                );
 
                 $this->on_action( $model );
             },
@@ -85,6 +90,20 @@ class Meta_Box_Controller extends \wpmvc\base\Controller {
      * @return void
      */
     public function before_save( int $post_id, \WP_Post $post ) {
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+            return;
+        }
+
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+            return;
+        }
+
+        $nonce_action = sprintf( 'wpmvc_meta_box_%s', $post->post_type );
+
+        if ( ! isset( $_POST[ $nonce_action ] ) || ! wp_verify_nonce( $_POST[ $nonce_action ], $nonce_action ) ) {
+            return;
+        }
+
         if ( ( new $this->model() )->post_type !== $post->post_type ) {
             return;
         }
