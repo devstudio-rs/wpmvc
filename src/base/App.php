@@ -24,17 +24,34 @@ class App extends Component {
     protected static $config = array();
 
     public $params = array();
-    public $request;
-    public $router;
-    public $view;
-    public $controller;
-    public $options;
-    public $logger;
+
+    private $_component_configs = array();
+    private $_components = array();
 
     public function __construct( array $config = array() ) {
         $this->set_config( $config );
+        $this->register_components();
+    }
 
-        $this->setup_components();
+    public function __get( $name ) {
+        if ( array_key_exists( $name, $this->_components ) ) {
+            return $this->_components[ $name ];
+        }
+
+        if ( isset( $this->_component_configs[ $name ] ) ) {
+            $this->_components[ $name ] = $this->create_component( $this->_component_configs[ $name ] );
+            return $this->_components[ $name ];
+        }
+
+        return null;
+    }
+
+    public function __set( $name, $value ) {
+        $this->_components[ $name ] = $value;
+    }
+
+    public function __isset( $name ) {
+        return isset( $this->_components[ $name ] ) || isset( $this->_component_configs[ $name ] );
     }
 
     /**
@@ -55,11 +72,11 @@ class App extends Component {
     }
 
     /**
-     * Setup application components.
+     * Merge default and user-defined component configs without instantiating.
      *
      * @return void
      */
-    private function setup_components() {
+    private function register_components() {
         $components = $this->get_components();
 
         if ( ! empty( static::$config['components'] ) ) {
@@ -72,13 +89,13 @@ class App extends Component {
             }
         }
 
-        foreach ( $components as $component_id => $component ) {
-            $component_class = $component['class'];
+        $this->_component_configs = $components;
+    }
 
-            unset( $component['class'] );
-
-            $this->{ $component_id } = new $component_class( $component );
-        }
+    private function create_component( array $config ) {
+        $class = $config['class'];
+        unset( $config['class'] );
+        return new $class( $config );
     }
 
     public static function alias( $value ) {
@@ -116,18 +133,6 @@ class App extends Component {
             ),
             'request' => array(
                 'class' => \wpmvc\web\Request::class,
-            ),
-            'view' => array(
-                'class'  => \wpmvc\web\View::class,
-                'assets' => array(),
-            ),
-            'options' => array(
-                'class'   => \wpmvc\web\Options::class,
-                'label'   => 'Options',
-                'config'  => array(),
-            ),
-            'logger' => array(
-                'class' => \wpmvc\components\Logger::class,
             ),
         );
     }

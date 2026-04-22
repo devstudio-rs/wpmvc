@@ -27,10 +27,6 @@ class Logger extends Component {
     public $permissions = 0755;
     public $size        = 20;
 
-    public function __construct( $attributes = array() ) {
-        $this->set_attributes( $attributes );
-    }
-
     /**
      * @param string $message
      * @param string $type
