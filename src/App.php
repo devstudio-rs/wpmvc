@@ -25,6 +25,8 @@ class App extends \wpmvc\base\App {
         static::$app = $this;
         static::setup();
 
+        $this->bootstrap();
+
         add_action( 'template_redirect',     array( $this, 'template_redirect' ), 1 );
         add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
     }

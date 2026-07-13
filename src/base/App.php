@@ -24,6 +24,7 @@ class App extends Component {
     protected static $config = array();
 
     public $params = array();
+    public $bootstrap = array();
 
     private $_component_configs = array();
     private $_components = array();
@@ -64,11 +65,13 @@ class App extends Component {
             'domain'     => 'default',
             'aliases'    => array(),
             'components' => array(),
+            'bootstrap'  => array(),
             'options'    => array(),
             'params'     => array(),
         ), $config );
 
-        $this->params = static::$config['params'];
+        $this->params    = static::$config['params'];
+        $this->bootstrap = static::$config['bootstrap'];
     }
 
     /**
@@ -90,6 +93,18 @@ class App extends Component {
         }
 
         $this->_component_configs = $components;
+    }
+
+    /**
+     * Instantiate the components listed in $bootstrap even if they are
+     * never accessed, so they can register their hooks eagerly.
+     *
+     * @return void
+     */
+    protected function bootstrap() {
+        foreach ( $this->bootstrap as $component_id ) {
+            $this->__get( $component_id );
+        }
     }
 
     private function create_component( array $config ) {
