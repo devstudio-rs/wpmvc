@@ -15,7 +15,7 @@ namespace wpmvc;
 
 class App extends \wpmvc\base\App {
 
-    public static $version = '1.3.0';
+    public static $version = '1.4.0';
 
     /**
      * Every application subclass (plugin, theme) MUST redeclare this
@@ -95,6 +95,10 @@ class App extends \wpmvc\base\App {
 
         foreach ( $this->router->routes as $route ) {
             if ( $wp->request !== $route['path'] ) {
+                continue;
+            }
+
+            if ( ! $this->router->matches_method( $route, $this->request->method() ) ) {
                 continue;
             }
 

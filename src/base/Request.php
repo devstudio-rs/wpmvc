@@ -8,12 +8,23 @@ class Request extends Component {
     const REQUEST_POST  = 'post';
 
     /**
+     * HTTP method of the current request, uppercase (e.g. 'GET', 'POST').
+     *
+     * @since 1.4.0
+     *
+     * @return string
+     */
+    public function method() : string {
+        return strtoupper( $_SERVER['REQUEST_METHOD'] ?? self::REQUEST_GET );
+    }
+
+    /**
      * @param string $method
      * @param string $attribute
      * @param mixed $default
      * @return array|mixed|null
      */
-    public function request( string $method = 'get', string $attribute = null, $default = null ) {
+    public function request( string $method = 'get', ?string $attribute = null, $default = null ) {
         $params = strtolower( $method ) === static::REQUEST_GET ?
             $_GET : $_POST;
 
@@ -34,7 +45,7 @@ class Request extends Component {
      * @param bool $safe
      * @return array|mixed|null
      */
-    public function get( string $attribute = null, $default = null ) {
+    public function get( ?string $attribute = null, $default = null ) {
         return $this->request( static::REQUEST_GET, $attribute, $default );
     }
 
@@ -43,7 +54,7 @@ class Request extends Component {
      * @param mixed $default
      * @return array|mixed|null
      */
-    public function post( string $attribute = null, $default = null ) {
+    public function post( ?string $attribute = null, $default = null ) {
         return $this->request( static::REQUEST_POST, $attribute, $default );
     }
 
