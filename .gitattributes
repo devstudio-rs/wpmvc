@@ -1,0 +1,7 @@
+# Exclude development-only files from dist archives (Composer installs).
+/docs           export-ignore
+/.github        export-ignore
+/.gitignore     export-ignore
+/.gitattributes export-ignore
+/package.json      export-ignore
+/package-lock.json export-ignore
