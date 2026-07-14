@@ -9,25 +9,70 @@ core.
 
 - PHP 7.2+
 - WordPress 6.2+
+- [Composer](https://getcomposer.org/)
 
 ## Installation
 
-The framework lives in its own directory (e.g. `wpmvc/` in the WordPress
-root) and is autoloaded under the `wpmvc\` namespace (PSR-4 from
-`wpmvc/src/`). Require its autoloader from your plugin or theme:
+The framework is installed per application — each plugin or theme that
+uses WPMVC requires it through its own `composer.json`. For a theme:
 
-```php
-require_once ABSPATH . 'wpmvc/vendor/autoload.php';
+```bash
+cd wp-content/themes/my-theme
+composer require devstudio-rs/wpmvc
 ```
 
-## Your first application
+## Example: a theme on WPMVC
 
-Create an application class by extending `\wpmvc\App`. Every application
+A minimal theme structure:
+
+```
+my-theme/
+├── composer.json
+├── functions.php
+├── Theme.php
+├── config/
+│   └── main.php
+├── controllers/
+│   └── Site_Controller.php
+├── models/
+├── views/
+├── index.php
+└── style.css
+```
+
+### composer.json
+
+Besides requiring the framework, register the theme's own namespace so
+controllers and models autoload:
+
+```json
+{
+    "require": {
+        "devstudio-rs/wpmvc": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "theme\\": "."
+        }
+    }
+}
+```
+
+Run `composer install` (or the `composer require` above) to generate the
+autoloader.
+
+### Theme.php
+
+Create the application class by extending `\wpmvc\App`. Every application
 class **must redeclare** `public static $app;` — that gives it its own
 static slot, so multiple applications (e.g. a plugin and a theme) can run
 side by side without overwriting each other:
 
 ```php
+<?php
+
+namespace theme;
+
 use wpmvc\App;
 
 class Theme extends App {
@@ -37,26 +82,74 @@ class Theme extends App {
 }
 ```
 
-Initialize it with a config array:
+### config/main.php
 
 ```php
-$config = array(
+<?php
+
+return array(
+    'name'   => 'Theme',
+    'domain' => 'theme',
+
     'aliases' => array(
         '@root' => get_template_directory(),
         '@web'  => get_template_directory_uri(),
     ),
 );
-
-( new Theme( $config ) )->init();
 ```
 
-From that point the application and its components are available anywhere:
+### functions.php
+
+Load the autoloader, initialize the application and register routes:
+
+```php
+<?php
+
+namespace theme;
+
+use theme\controllers\Site_Controller;
+use wpmvc\web\Router;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$config = require __DIR__ . '/config/main.php';
+
+( new Theme( $config ) )->init();
+
+Router::get( 'site', array( Site_Controller::class, 'action_index' ) );
+```
+
+### controllers/Site_Controller.php
+
+```php
+<?php
+
+namespace theme\controllers;
+
+use wpmvc\web\Controller;
+
+class Site_Controller extends Controller {
+
+    public function action_index() {
+        echo 'Hello from WPMVC.';
+    }
+
+}
+```
+
+Activate the theme and open `{host}/site/` — the action responds.
+
+From here, the application and its components are available anywhere:
 
 ```php
 Theme::$app->request->post();
-Theme::app()->request->post();
+Theme::$app->user->is_guest;
+Theme::$app->logger->log( 'Hello', Logger::TYPE_INFO );
 ```
 
-Continue with [Applications](/guide/applications) to understand the
-application lifecycle, or jump straight to [Routing](/guide/routing) and
-[Post Models](/guide/models).
+## Next steps
+
+- [Applications](/guide/applications) — lifecycle, config, multiple apps
+- [Routing](/guide/routing) — HTTP methods and route parameters
+- [Post Models](/guide/models) — custom post types with meta attributes
+- [Meta Boxes](/guide/meta-boxes) — admin UI without the ceremony

@@ -1,5 +1,21 @@
 # wpmvc
 
+An MVC framework for WordPress. Full documentation:
+[wpmvc.devstudio.rs](https://wpmvc.devstudio.rs)
+
+## Installation
+
+Install per application — each plugin or theme that uses WPMVC requires it
+through its own `composer.json`:
+
+```bash
+composer require devstudio-rs/wpmvc
+```
+
+```php
+require_once __DIR__ . '/vendor/autoload.php';
+```
+
 ## App
 
 Create your application class by extending `\wpmvc\App`. Every application
