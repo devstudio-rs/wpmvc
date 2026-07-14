@@ -222,15 +222,83 @@ class Site_Controller extends \wpmvc\web\Controller {
 }
 ```
 
-Register a route on your application's router, after `init()`:
+### Routes
+
+Register routes after `init()`. The static `Router::get()`, `Router::post()`
+and `Router::any()` methods register a route filtered by HTTP method:
 
 ```php
-Theme::$app->router->add_route( 'site', array( Site_Controller::class, 'action_index' ) );
+use wpmvc\web\Router;
+
+Router::get( 'user', array( User_Controller::class, 'action_show' ) );    // GET only
+Router::post( 'site', array( Site_Controller::class, 'action_index' ) );  // POST only
+Router::any( 'page', array( Page_Controller::class, 'action_index' ) );   // any method
 ```
 
-The registered action will be available at `{host}/site/`. Each application
-has its own router — routes are always registered explicitly on the
-application that should handle them.
+The registered action will be available at `{host}/site/` etc. A request
+whose method does not match falls through to regular WordPress handling.
+
+Each application has its own router — there is no global route registry.
+The static form registers on the **most recently initialized** application
+(the theme, since plugins load first) — the same fallback rule as
+`App::alias()`. To target a specific application, use the instance method,
+whose optional third argument is the HTTP method (defaults to
+`Router::METHOD_ANY`):
+
+```php
+WPMVC::$app->router->add_route( 'site', array( Site_Controller::class, 'action_index' ), Router::METHOD_POST );
+```
+
+### Route parameters
+
+Route paths can declare `{param}` placeholders. Each placeholder matches
+exactly one URL segment, and the captured values are passed to the action
+as positional arguments, in declaration order:
+
+```php
+Router::get( 'user/{id}', array( User_Controller::class, 'action_show' ) );
+// /user/5/ -> action_show( '5' )
+
+Router::get( 'user/{action}/{id}', array( User_Controller::class, 'action_show' ) );
+// /user/edit/5/ -> action_show( 'edit', '5' )
+```
+
+Parameters are required:
+
+- A route with placeholders only matches URLs where every segment is
+  present — `user/{action}/{id}` does not match `/user/` or `/user/edit/`.
+  A bare `/user/` URL works only when registered as its own route.
+- A route is never dispatched with missing arguments: when the action
+  declares more required parameters than the route provides, the route is
+  skipped and WordPress serves its regular 404. Give the parameters
+  defaults (`action_show( $id = null )`) when a bare route should reach
+  the same action.
+
+Captured values arrive as raw URL strings — sanitize them in the action.
+The HTTP method of the current request is available as
+`App::$app->request->method()`.
+
+## Current user
+
+Every application has a built-in `user` component wrapping the currently
+logged-in WordPress user — available out of the box, no configuration
+required:
+
+```php
+App::$app->user->is_guest;             // bool (also callable: is_guest())
+App::$app->user->id;                   // int, 0 for guests
+App::$app->user->identity;             // WP_User|null
+App::$app->user->role;                 // primary role, null for guests
+App::$app->user->roles;                // string[]
+App::$app->user->has_role( 'editor' );
+App::$app->user->can( 'edit_post', $post_id );  // current_user_can()
+```
+
+Properties are read-only virtual attributes resolved via `get_*()` getters.
+All state is read live from WordPress (never cached), so it stays correct
+even when the current user changes mid-request (`wp_set_current_user()`).
+Like any component, it can be overridden per application via the
+`components` config key.
 
 ## Meta boxes
 
