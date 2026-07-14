@@ -45,6 +45,17 @@ abstract class Post_Model extends Active_Model {
     protected function init() {}
 
     /**
+     * Declare meta boxes for this post type. Each item is an array of
+     * `array( Controller_Class::class, $title, $args )` — title and args
+     * are optional. Wired automatically by register().
+     *
+     * @return array
+     */
+    protected function meta_boxes() : array {
+        return array();
+    }
+
+    /**
      * Return $args values for register_post_type.
      *
      * @return array
@@ -149,15 +160,24 @@ abstract class Post_Model extends Active_Model {
             return null;
         }
 
-        $post = current( $query->posts );
+        return $this->populate( current( $query->posts ) );
+    }
 
+    /**
+     * Hydrate the model from an existing WP_Post object, including meta
+     * attributes. Avoids a second query when the post is already at hand.
+     *
+     * @param \WP_Post $post
+     * @return $this
+     */
+    public function populate( \WP_Post $post ) : self {
         $this->set_attributes( (array) $post );
 
         $meta_attributes = array();
-        $meta_keys       = $this->get_attributes_meta_keys();
 
-        foreach ( $meta_keys as $meta_key ) {
+        foreach ( $this->get_attributes_meta_keys() as $meta_key ) {
             $value = get_post_meta( $post->ID, $meta_key );
+
             $meta_attributes[ $meta_key ] = $value[0] ?? $this->{ $meta_key };
         }
 
@@ -278,16 +298,22 @@ abstract class Post_Model extends Active_Model {
 
         register_post_type( $post_type, $args );
 
+        foreach ( $model->meta_boxes() as $meta_box ) {
+            $meta_box = array_values( (array) $meta_box );
+
+            $model->add_meta_box( $meta_box[0], $meta_box[1] ?? '', $meta_box[2] ?? array() );
+        }
+
         $model->init();
     }
 
     /**
      * @param string $controller
-     * @param string $title
+     * @param string $title Optional — defaults to a title derived from the controller class name.
      * @param array $args
      * @return void
      */
-    public function add_meta_box( string $controller, string $title, array $args = array() ) {
+    public function add_meta_box( string $controller, string $title = '', array $args = array() ) {
         /** @var Meta_Box_Controller $controller */
         $controller = new $controller();
 
@@ -303,7 +329,7 @@ abstract class Post_Model extends Active_Model {
         $controller->set_attributes( $args );
 
         add_action( sprintf( 'add_meta_boxes_%s', $this->post_type ), array( $controller, 'init' ) );
-        add_action( 'wp_after_insert_post', array( $controller, 'before_save' ), 10, 2 );
+        add_action( 'wp_after_insert_post', array( $controller, 'save' ), 10, 2 );
     }
 
 }

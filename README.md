@@ -234,8 +234,10 @@ application that should handle them.
 
 ## Meta boxes
 
-Define a meta box controller. `on_action()` renders the meta box,
-`on_save()` persists it:
+Define a meta box controller. In the common case only `on_action()`
+(render) is needed — the inherited `on_save()` already loads request data
+into the model, validates it and saves, showing validation errors as an
+admin notice after the redirect:
 
 ```php
 class Event_Options_Controller extends \wpmvc\web\Meta_Box_Controller {
@@ -246,30 +248,33 @@ class Event_Options_Controller extends \wpmvc\web\Meta_Box_Controller {
         ) );
     }
 
-    public function on_save( $model ) {
-        if ( $model->load( Theme::$app->request->post() ) ) {
-            $model->save();
-        }
-    }
-
 }
 ```
 
-Add the meta box to the post model by passing the controller class and a
-title to `add_meta_box()`:
+Override `on_save( $model )` only when custom persistence logic is needed.
+
+Declare the meta box on the post model — `register()` wires everything
+(rendering, nonce, capability checks, saving) automatically:
 
 ```php
 class Event extends \wpmvc\models\Post_Model {
 
     public $post_type = 'event';
 
-    protected function init() {
-        $this->add_meta_box( Event_Options_Controller::class, __( 'Options' ) );
+    protected function meta_boxes() : array {
+        return array(
+            array( Event_Options_Controller::class, __( 'Options' ) ),
+        );
     }
 
 }
 ```
 
-`init()` runs right after the post type is registered, so hooking
-`add_action( 'init', array( Event::class, 'register' ) )` is all that is
-needed to get both the post type and its meta boxes.
+Each `meta_boxes()` item is `array( Controller_Class::class, $title, $args )`
+— title and args are optional. When the title is omitted it is derived from
+the controller class name (`Event_Options_Controller` → “Event Options”).
+For dynamic cases, `$this->add_meta_box( $controller, $title, $args )` can
+still be called from the model's `init()`.
+
+With `add_action( 'init', array( Event::class, 'register' ) )` in place,
+the post type and its meta boxes are fully wired.
