@@ -15,7 +15,7 @@ namespace wpmvc;
 
 class App extends \wpmvc\base\App {
 
-    public static $version = '1.1.0';
+    public static $version = '1.2.0';
 
     /**
      * Every application subclass (plugin, theme) MUST redeclare this
