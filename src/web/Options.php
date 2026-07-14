@@ -109,7 +109,7 @@ class Options extends Component {
      * @return void
      */
     public function setup_options_template() {
-        $page_slug    = App::$app->request->get( 'page' );
+        $page_slug    = App::app()->request->get( 'page' );
         $option_index = array_search( $page_slug, array_column( $this->config, 'id' ) );
         $option_index = ! empty( $option_index ) ? $option_index : 0;
 

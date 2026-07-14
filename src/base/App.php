@@ -21,10 +21,18 @@ namespace wpmvc\base;
 
 class App extends Component {
 
-    protected static $config = array();
+    protected $config = array();
 
     public $params = array();
     public $bootstrap = array();
+
+    /**
+     * Registered application instances, keyed by concrete class name.
+     * Allows the plugin and the theme to each run their own app.
+     *
+     * @var self[]
+     */
+    private static $instances = array();
 
     private $_component_configs = array();
     private $_components = array();
@@ -32,6 +40,8 @@ class App extends Component {
     public function __construct( array $config = array() ) {
         $this->set_config( $config );
         $this->register_components();
+
+        self::$instances[ static::class ] = $this;
     }
 
     public function __get( $name ) {
@@ -56,11 +66,45 @@ class App extends Component {
     }
 
     /**
+     * Resolve the application instance for the called class.
+     *
+     * `Theme::app()` returns the theme instance, `WPMVC::app()` the plugin
+     * instance. When called on a class with no registered instance (e.g.
+     * `App::app()` from a shared helper), the most recently registered
+     * subclass instance is returned.
+     *
+     * @return self
+     * @throws \wpmvc\exceptions\App_Not_Initialized_Exception When no instance exists yet.
+     */
+    public static function app() : self {
+        if ( isset( self::$instances[ static::class ] ) ) {
+            return self::$instances[ static::class ];
+        }
+
+        $found = null;
+
+        foreach ( self::$instances as $instance ) {
+            if ( $instance instanceof static ) {
+                $found = $instance;
+            }
+        }
+
+        if ( $found instanceof self ) {
+            return $found;
+        }
+
+        throw new \wpmvc\exceptions\App_Not_Initialized_Exception( sprintf(
+            'No %1$s application instance has been created yet. Instantiate the application first, e.g. `( new Theme( $config ) )->init()`, before calling %1$s::app().',
+            static::class
+        ) );
+    }
+
+    /**
      * @param array $config
      * @return void
      */
     private function set_config( array $config = array() ) {
-        static::$config = array_merge( array(
+        $this->config = array_merge( array(
             'name'       => '',
             'domain'     => 'default',
             'aliases'    => array(),
@@ -70,8 +114,8 @@ class App extends Component {
             'params'     => array(),
         ), $config );
 
-        $this->params    = static::$config['params'];
-        $this->bootstrap = static::$config['bootstrap'];
+        $this->params    = $this->config['params'];
+        $this->bootstrap = $this->config['bootstrap'];
     }
 
     /**
@@ -82,8 +126,8 @@ class App extends Component {
     private function register_components() {
         $components = $this->get_components();
 
-        if ( ! empty( static::$config['components'] ) ) {
-            foreach ( static::$config['components'] as $component_id => $component ) {
+        if ( ! empty( $this->config['components'] ) ) {
+            foreach ( $this->config['components'] as $component_id => $component ) {
                 $components[ $component_id ] = ! empty( $components[ $component_id ] ) ?
                     array_merge(
                         $components[ $component_id ],
@@ -110,15 +154,54 @@ class App extends Component {
     private function create_component( array $config ) {
         $class = $config['class'];
         unset( $config['class'] );
-        return new $class( $config );
+
+        return new $class( $this->resolve_aliases( $config ) );
     }
 
+    /**
+     * Recursively resolve aliases in a component config, so components
+     * receive final values and stay decoupled from the app. Class-level
+     * defaults never pass through here — they may only use framework
+     * aliases (@wpmvc.*, @upload.*, @home, @content), resolved statically
+     * at the point of use.
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private function resolve_aliases( $value ) {
+        if ( is_array( $value ) ) {
+            return array_map( array( $this, 'resolve_aliases' ), $value );
+        }
+
+        if ( is_string( $value ) ) {
+            return $this->get_alias( $value );
+        }
+
+        return $value;
+    }
+
+    /**
+     * Resolve aliases against the called class's application instance.
+     *
+     * @param string $value
+     * @return string
+     */
     public static function alias( $value ) {
-        if ( empty( static::$config['aliases'] ) ) {
+        return static::app()->get_alias( $value );
+    }
+
+    /**
+     * Resolve aliases against this application instance.
+     *
+     * @param string $value
+     * @return string
+     */
+    public function get_alias( $value ) {
+        if ( empty( $this->config['aliases'] ) ) {
             return $value;
         }
 
-        return strtr( $value, static::$config['aliases'] );
+        return strtr( $value, $this->config['aliases'] );
     }
 
     /**
@@ -128,7 +211,7 @@ class App extends Component {
      */
     public static function t( string $text, $domain = null ) : string {
         if ( empty( $domain ) ) {
-            $domain = static::$config['domain'];
+            $domain = static::app()->config['domain'];
         }
 
         return translate( $text, $domain );
@@ -138,7 +221,7 @@ class App extends Component {
      * @return array
      */
     public function get_config() : array {
-        return static::$config;
+        return $this->config;
     }
 
     private function get_components() : array {
