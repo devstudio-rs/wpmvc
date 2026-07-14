@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'WPMVC',
-  description: 'An MVC framework for WordPress, inspired by Yii2.',
+  description: 'An MVC framework for WordPress.',
   cleanUrls: true,
   lastUpdated: true,
 

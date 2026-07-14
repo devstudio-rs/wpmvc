@@ -3,7 +3,7 @@
 WPMVC is an MVC framework built on top of WordPress. It simplifies the
 WordPress functionality you touch every day — custom post types, routing,
 views, meta boxes, admin options, logging — behind a small, config-driven
-core inspired by Yii2.
+core.
 
 ## Requirements
 

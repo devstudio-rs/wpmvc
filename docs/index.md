@@ -4,7 +4,7 @@ layout: home
 hero:
   name: WPMVC
   text: MVC framework for WordPress
-  tagline: Models, routing, views, meta boxes and options — the WordPress way, without the boilerplate. Inspired by Yii2.
+  tagline: Models, routing, views, meta boxes and options — the WordPress way, without the boilerplate.
   actions:
     - theme: brand
       text: Get Started
