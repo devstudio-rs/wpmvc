@@ -15,7 +15,7 @@ namespace wpmvc;
 
 class App extends \wpmvc\base\App {
 
-    public static $version = '1.4.0';
+    public static $version = '1.5.0';
 
     /**
      * Every application subclass (plugin, theme) MUST redeclare this
@@ -94,7 +94,9 @@ class App extends \wpmvc\base\App {
         }
 
         foreach ( $this->router->routes as $route ) {
-            if ( $wp->request !== $route['path'] ) {
+            $params = $this->router->match_path( $route, $wp->request );
+
+            if ( false === $params ) {
                 continue;
             }
 
@@ -117,12 +119,23 @@ class App extends \wpmvc\base\App {
                 continue;
             }
 
+            // Route params are required: when the action declares more
+            // required parameters than the route path provides, the route
+            // is not available (falls through to a regular WP 404).
+            $required = ( new \ReflectionMethod( $this->controller, $action ) )->getNumberOfRequiredParameters();
+
+            if ( count( $params ) < $required ) {
+                $this->controller = null;
+
+                continue;
+            }
+
             http_response_code( 200 );
 
             $this->controller->action = $action;
             $this->controller->before_action();
 
-            call_user_func( array( $this->controller, $this->controller->action ) );
+            call_user_func_array( array( $this->controller, $this->controller->action ), $params );
         }
     }
 

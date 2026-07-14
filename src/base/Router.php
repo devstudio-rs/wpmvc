@@ -72,6 +72,43 @@ class Router extends Component {
     }
 
     /**
+     * Match a route path against the requested path and extract
+     * `{param}` placeholder values.
+     *
+     * Placeholders match a single path segment, and their values are
+     * returned in declaration order — `user/{action}/{id}` against
+     * `user/edit/5` yields `array( 'edit', '5' )` — so they can be
+     * passed to the controller action as positional arguments.
+     *
+     * @since 1.5.0
+     *
+     * @param array $route
+     * @param string $path Requested path (e.g. `$wp->request`).
+     * @return array|false Placeholder values (empty array for a static
+     *                     route), or false when the route does not match.
+     */
+    public function match_path( array $route, string $path ) {
+        if ( $route['path'] === $path ) {
+            return array();
+        }
+
+        if ( strpos( $route['path'], '{' ) === false ) {
+            return false;
+        }
+
+        $pattern = array_map( function ( $segment ) {
+            return preg_match( '/^\{[a-zA-Z_][a-zA-Z0-9_]*\}$/', $segment ) ?
+                '([^/]+)' : preg_quote( $segment, '#' );
+        }, explode( '/', $route['path'] ) );
+
+        if ( ! preg_match( '#^' . implode( '/', $pattern ) . '$#', $path, $matches ) ) {
+            return false;
+        }
+
+        return array_slice( $matches, 1 );
+    }
+
+    /**
      * Whether a route accepts the given HTTP request method.
      *
      * @since 1.4.0
