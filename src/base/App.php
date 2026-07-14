@@ -16,6 +16,7 @@ namespace wpmvc\base;
  * @property \wpmvc\web\Controller $controller
  * @property \wpmvc\web\Options $options
  * @property \wpmvc\components\Logger $logger
+ * @property \wpmvc\components\User $user
  *
  */
 
@@ -231,6 +232,9 @@ class App extends Component {
             ),
             'request' => array(
                 'class' => \wpmvc\web\Request::class,
+            ),
+            'user' => array(
+                'class' => \wpmvc\components\User::class,
             ),
         );
     }
