@@ -1,10 +1,10 @@
 .hero-logo {
-  margin-bottom: 24px;
+  margin-bottom: 8px;
 }
 
 .hero-logo img {
   width: 100%;
-  max-width: 380px;
+  max-width: 280px;
   height: auto;
 }
 

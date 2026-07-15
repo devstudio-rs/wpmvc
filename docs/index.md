@@ -25,6 +25,4 @@ features:
     details: Declare meta boxes on the model; rendering, nonces, validation, saving and admin notices are wired for you.
   - title: Plugin and theme, side by side
     details: Each application runs isolated with its own config, aliases, router and components. No shared state.
-  - title: Batteries included
-    details: Current-user component, admin options pages, logger with rotation, form helpers and asset cache busting.
 ---
