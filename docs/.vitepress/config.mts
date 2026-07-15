@@ -11,6 +11,13 @@ export default defineConfig({
   },
 
   themeConfig: {
+    logo: {
+      light: '/logo.png',
+      dark: '/logo-dark.png',
+      alt: 'WPMVC',
+    },
+    siteTitle: false,
+
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Changelog', link: '/changelog' },
