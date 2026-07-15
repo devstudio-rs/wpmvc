@@ -2,7 +2,6 @@
 layout: home
 
 hero:
-  name: WPMVC
   text: Super-light MVC for WordPress
   tagline: A tiny core built entirely on components — declared in config, loaded only when you use them. Models, routing, views, meta boxes and options without the boilerplate.
   actions:

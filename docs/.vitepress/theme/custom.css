@@ -1,0 +1,28 @@
+.hero-logo {
+  margin-bottom: 24px;
+}
+
+.hero-logo img {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+}
+
+.hero-logo .logo-dark {
+  display: none;
+}
+
+.dark .hero-logo .logo-light {
+  display: none;
+}
+
+.dark .hero-logo .logo-dark {
+  display: block;
+}
+
+@media (max-width: 959px) {
+  .hero-logo {
+    display: flex;
+    justify-content: center;
+  }
+}
