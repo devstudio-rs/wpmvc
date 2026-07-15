@@ -7,6 +7,7 @@ export default defineConfig({
   lastUpdated: true,
 
   head: [
+    ['meta', { name: 'google-site-verification', content: 'qKeiA8balNmaVTx5CfOlPRiTMuHerlun72W3Wdis0qw' }],
     ['link', { rel: 'icon', href: '/favicon.ico', sizes: '48x48' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32.png' }],
     ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' }],
