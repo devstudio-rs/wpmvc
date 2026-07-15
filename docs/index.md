@@ -1,5 +1,7 @@
 ---
 layout: home
+title: WPMVC
+titleTemplate: ':title — WordPress MVC Framework'
 
 hero:
   text: Super-light MVC for WordPress
