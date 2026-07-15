@@ -1,9 +1,11 @@
 # Components
 
-Components are the application's building blocks: `request`, `router`,
-`view`, `options`, `logger`, `user`… They are declared under the
+WPMVC is built on components — they are the framework, not an add-on to
+it. Everything the application does goes through one: `request`, `router`,
+`view`, `options`, `logger`, `user`… Components are declared under the
 `components` config key and **lazy-loaded** — a component is instantiated
-on first access, not upfront:
+on first access, not upfront. This is what keeps the framework light: the
+core stays a thin container, and nothing loads until you use it:
 
 ```php
 $config = array(

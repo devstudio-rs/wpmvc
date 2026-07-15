@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: WPMVC
-  text: MVC framework for WordPress
-  tagline: Models, routing, views, meta boxes and options — the WordPress way, without the boilerplate.
+  text: Super-light MVC for WordPress
+  tagline: A tiny core built entirely on components — declared in config, loaded only when you use them. Models, routing, views, meta boxes and options without the boilerplate.
   actions:
     - theme: brand
       text: Get Started
@@ -14,8 +14,10 @@ hero:
       link: https://github.com/devstudio-rs/wpmvc
 
 features:
-  - title: Light core, lazy components
-    details: Components are declared in config and instantiated on first access. Nothing loads until you use it.
+  - title: Super-light core
+    details: The core is a thin application container and nothing more. No base classes to fight, no overhead on requests that don't use the framework.
+  - title: Built on components
+    details: Everything — request, router, view, options, logger, user — is a component. Declared in config, lazy-loaded on first access, replaceable with your own class in one line.
   - title: Models over post types
     details: Declare a public property on your model and it becomes post meta — read and written automatically. Chainable query API included.
   - title: Real routing
