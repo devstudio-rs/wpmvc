@@ -27,6 +27,11 @@
   }
 }
 
+/* Debugger screenshots in the guide (:where keeps specificity below .coming-soon img) */
+.vp-doc :where(img[src^="/debug/"]) {
+  border-radius: 8px;
+}
+
 /* "Coming soon" section on the home page */
 .coming-soon {
   max-width: 1152px;
