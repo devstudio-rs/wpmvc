@@ -101,6 +101,51 @@ class App extends Component {
     }
 
     /**
+     * All registered application instances, keyed by concrete class name,
+     * in registration order (plugins before the theme).
+     *
+     * @since 1.7.0
+     * @return self[]
+     */
+    public static function instances() : array {
+        return self::$instances;
+    }
+
+    /**
+     * IDs of all declared components (built-in defaults merged with config).
+     *
+     * @since 1.7.0
+     * @return string[]
+     */
+    public function get_component_ids() : array {
+        return array_keys( $this->_component_configs );
+    }
+
+    /**
+     * IDs of the components instantiated so far. Reading this never
+     * triggers instantiation — it only reflects what lazy loading has
+     * already created.
+     *
+     * @since 1.7.0
+     * @return string[]
+     */
+    public function get_loaded_component_ids() : array {
+        return array_keys( $this->_components );
+    }
+
+    /**
+     * Declared component configs keyed by ID (built-in defaults merged
+     * with user config), exactly as registered — `class` included,
+     * aliases unresolved.
+     *
+     * @since 1.7.0
+     * @return array
+     */
+    public function get_component_configs() : array {
+        return $this->_component_configs;
+    }
+
+    /**
      * @param array $config
      * @return void
      */

@@ -6,6 +6,16 @@ internal refactors, **minor** for new features *and* breaking API changes
 stabilization milestone; from then on breaking changes bump major per
 semver.
 
+## 1.7.0
+
+**Application introspection.** `App::instances()` returns all registered
+application instances keyed by class name, in registration order. On an
+instance, `get_component_ids()` lists every declared component,
+`get_loaded_component_ids()` lists the ones lazy loading has already
+instantiated, and `get_component_configs()` returns the declared configs
+as registered — reading them never triggers instantiation. Added for
+tooling such as `wpmvc-debug`.
+
 ## 1.6.0
 
 **Plugin views.** `View::render()` accepts absolute paths: a relative view
