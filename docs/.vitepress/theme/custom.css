@@ -26,3 +26,82 @@
     justify-content: center;
   }
 }
+
+/* "Coming soon" section on the home page */
+.coming-soon {
+  max-width: 1152px;
+  margin: 96px auto 96px;
+}
+
+.coming-soon-header {
+  margin-bottom: 32px;
+}
+
+.coming-soon-intro {
+  max-width: 720px;
+}
+
+.coming-soon h2 {
+  border-top: none;
+  margin: 0 0 12px;
+  padding-top: 0;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+}
+
+.coming-soon-badge {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--vp-c-brand-1);
+  background-color: var(--vp-c-brand-soft);
+}
+
+.coming-soon-intro p {
+  margin: 0;
+  color: var(--vp-c-text-2);
+}
+
+.coming-soon-actions {
+  margin-top: 20px;
+}
+
+.coming-soon-actions a {
+  display: inline-block;
+  padding: 0 20px;
+  line-height: 38px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--vp-button-brand-text);
+  background-color: var(--vp-button-brand-bg);
+  border: 1px solid var(--vp-button-brand-border);
+  text-decoration: none;
+  transition: color 0.25s, border-color 0.25s, background-color 0.25s;
+}
+
+.coming-soon-actions a:hover {
+  color: var(--vp-button-brand-hover-text);
+  background-color: var(--vp-button-brand-hover-bg);
+  border-color: var(--vp-button-brand-hover-border);
+}
+
+.coming-soon img {
+  display: block;
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid var(--vp-c-divider);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.coming-soon a:hover img {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}

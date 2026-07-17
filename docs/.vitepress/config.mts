@@ -5,6 +5,7 @@ export default defineConfig({
   description: 'A super-light, component-based MVC framework for WordPress.',
   cleanUrls: true,
   lastUpdated: true,
+  appearance: 'dark',
 
   head: [
     ['meta', { name: 'google-site-verification', content: 'qKeiA8balNmaVTx5CfOlPRiTMuHerlun72W3Wdis0qw' }],
@@ -27,6 +28,7 @@ export default defineConfig({
 
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
+      { text: 'Debug', link: '/guide/debug' },
       { text: 'Changelog', link: '/changelog' },
     ],
 
@@ -68,6 +70,12 @@ export default defineConfig({
           { text: 'Current User', link: '/guide/user' },
           { text: 'Logger', link: '/guide/logger' },
           { text: 'Form & Html Helpers', link: '/guide/helpers' },
+        ],
+      },
+      {
+        text: 'Tooling',
+        items: [
+          { text: 'WPMVC Debug', link: '/guide/debug' },
         ],
       },
     ],

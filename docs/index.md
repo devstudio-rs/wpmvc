@@ -28,3 +28,33 @@ features:
   - title: Plugin and theme, side by side
     details: Each application runs isolated with its own config, aliases, router and components. No shared state.
 ---
+
+<div class="coming-soon">
+
+<div class="coming-soon-header">
+
+<div class="coming-soon-intro">
+
+<span class="coming-soon-badge">In active development</span>
+
+## WPMVC Debugger — coming soon {#wpmvc-debug}
+
+We're actively building **WPMVC Debug**, a debug toolbar and profiler for the
+framework. A floating panel on the front end that lets you inspect a request as
+you develop — applications, components, database queries, logs, scheduled cron
+jobs and the server environment — all without touching your application code.
+
+</div>
+
+<div class="coming-soon-actions">
+
+[Read more →](/guide/debug)
+
+</div>
+
+</div>
+
+[![WPMVC Debug overview panel](/debug/overview.png)](/guide/debug)
+
+</div>
+
