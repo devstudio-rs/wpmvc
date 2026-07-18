@@ -32,6 +32,17 @@
   border-radius: 8px;
 }
 
+/* medium-zoom lightbox for the screenshots: the overlay and the zoomed
+   image must sit above VitePress's navbar/sidebar. */
+.medium-zoom-overlay {
+  z-index: 999;
+}
+
+.medium-zoom-image--opened {
+  z-index: 1000;
+  border-radius: 8px;
+}
+
 /* "Coming soon" section on the home page */
 .coming-soon {
   max-width: 1152px;
