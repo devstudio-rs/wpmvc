@@ -9,8 +9,8 @@ it's headed and what already works.
 **WPMVC Debug** is a debug toolbar and profiler for the WPMVC framework. It adds
 a floating button to the front end that opens a panel with everything you need
 to inspect a request while developing: the initialized applications, their
-components, database queries, logs, scheduled cron jobs and the server
-environment.
+components, database queries, logs, the hooks fired during the request,
+scheduled cron jobs and the server environment.
 
 It is a **development tool** — install it as a dev dependency and enable it only
 in local/debug environments. The panel reads state and never alters your
@@ -133,11 +133,30 @@ multi-line stack traces). Administrators get a **Clear** button per log.
 
 ![Logs](/debug/logs.png)
 
+### Events
+
+The WordPress actions and filters fired during the request, aggregated per
+hook: type, fire count, total execution time and when it first fired. The list
+is searchable, filterable by type and sortable by time (to surface the slowest
+hooks first). Each row expands to timing details and the callbacks registered
+on the hook (priority, source, file and line). A **Timeline** sub-tab charts
+every hook as a bar — positioned at its first fire within the request, sized
+by the total time spent in its callbacks.
+
+Capture starts when the component boots, so hooks fired earlier in the
+bootstrap (mu-plugins and plugins loading) are not recorded. High-frequency
+noise hooks (translations, escaping, per-option/transient reads) are excluded,
+and recording is capped at 500 unique hooks per request.
+
+![Events](/debug/events.png)
+
 ### Scheduled Jobs
 
 The WP-Cron schedule (`_get_cron_array()`): every event with its next run,
 recurrence, arguments and status, plus summary stats. Administrators can expand
 a job to **run it now** or **delete** it.
+
+![Scheduled Jobs](/debug/scheduled-jobs.png)
 
 ### Environment
 
