@@ -158,6 +158,19 @@ a job to **run it now** or **delete** it.
 
 ![Scheduled Jobs](/debug/scheduled-jobs.png)
 
+### Cache
+
+What WordPress's caching layers actually expose, in three sub-tabs:
+**Object Cache** — the active backend (core's in-memory cache or a
+persistent drop-in), this request's hits/misses and hit rate, and the cache
+contents per group with item counts and approximate sizes; **Transients** —
+every transient in the database with its scope, expiry state and size;
+**Autoloaded Options** — how many options load on every request, their
+combined size, and the largest ones. Administrators can flush the object
+cache (persistent backends only) and delete expired transients.
+
+![Cache](/debug/cache.png)
+
 ### Environment
 
 Server, PHP, WordPress and database configuration, the loaded PHP extensions,
